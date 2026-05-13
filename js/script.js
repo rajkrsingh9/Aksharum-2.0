@@ -243,7 +243,6 @@ ScrollTrigger.create({
       },
       duration: .9,
       ease: 'power3.out',
-      clearProps: 'rotateX,scale'
     });
     // icon pop with delay
     gsap.fromTo('.fg-ico',
@@ -268,19 +267,6 @@ ScrollTrigger.create({
   }
 });
 
-// Magnetic hover
-document.querySelectorAll('.fg-card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left - r.width/2)  * .06;
-    const y = (e.clientY - r.top  - r.height/2) * .06;
-    gsap.to(card, {x, y, duration:.3, ease:'power2.out'});
-  });
-  card.addEventListener('mouseleave', () => {
-    gsap.to(card, {x:0, y:0, duration:.6, ease:'elastic.out(1,.4)'});
-  });
-});
-
 
 gsap.fromTo('.mod-card',{autoAlpha:0,y:28},{autoAlpha:1,y:0,stagger:.06,duration:.6,ease:'power3.out',scrollTrigger:{trigger:'.modules-grid',start:'top 85%',once:true}});
 gsap.fromTo('.role-card',{autoAlpha:0,y:28,scale:.97},{autoAlpha:1,y:0,scale:1,stagger:.1,duration:.7,ease:'back.out(1.3)',scrollTrigger:{trigger:'.roles-grid',start:'top 85%',once:true}});
@@ -302,6 +288,7 @@ gsap.fromTo('.t-badge',{autoAlpha:0,scale:.7},{autoAlpha:1,scale:1,stagger:.2,du
 gsap.fromTo('.t-role',
   {autoAlpha:0,x:48,y:16},
   {autoAlpha:1,x:0,y:0,stagger:.15,duration:.85,ease:'power3.out',
+   clearProps:'transform,x,y',
    scrollTrigger:{trigger:'#tailoredRoles',start:'top 82%',once:true}}
 );
 
@@ -309,6 +296,7 @@ gsap.fromTo('.t-role',
 gsap.fromTo('.t-dot',
   {scale:.4,autoAlpha:0},
   {scale:1,autoAlpha:1,stagger:.15,duration:.5,ease:'back.out(1.8)',delay:.2,
+   clearProps:'transform,scale',
    scrollTrigger:{trigger:'#tailoredRoles',start:'top 82%',once:true}}
 );
 

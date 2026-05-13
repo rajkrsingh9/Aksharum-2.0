@@ -12,6 +12,13 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif;color:var(--ink);letter-spacing
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
 
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+}
+
 /* NAV */
 nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);transition:box-shadow .3s}
 nav.scrolled{box-shadow:0 2px 20px rgba(93,63,184,.08)}
@@ -643,9 +650,10 @@ nav.scrolled{box-shadow:0 2px 20px rgba(93,63,184,.08)}
 }
 .t-dot svg{width:17px;height:17px;color:var(--p500);transition:color .3s,transform .35s}
 .t-role:hover .t-dot{
-  background:var(--p700);border-color:var(--p700);
+  background:var(--p700);
+  border-color:var(--p700);
   box-shadow:0 6px 20px rgba(93,63,184,.3);
-  transform:scale(1.1);
+  transform:translateX(8px) scale(1.1);
 }
 .t-role:hover .t-dot svg{color:#fff;transform:scale(1.1)}
 
