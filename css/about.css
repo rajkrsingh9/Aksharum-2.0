@@ -35,7 +35,7 @@ nav.scrolled{border-color:var(--line);box-shadow:0 2px 20px rgba(93,63,184,.07)}
 .n-demo:hover svg{transform:translateX(3px)}
 
 /* ══ ABOUT HERO ══ */
-.about-hero{position:relative;background:#f8f6ff;padding:80px 0 200px;overflow:hidden;min-height:calc(100vh - 66px);display:flex;align-items:center}
+.about-hero{position:relative;background:#f8f6ff;padding:50px 0 120px;overflow:hidden;min-height:calc(100vh - 66px);display:flex;align-items:center}
 .bg-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(2px)}
 .bg-orb-left{left:-180px;top:18%;width:520px;height:520px;background:radial-gradient(circle,rgba(124,95,214,.1) 0%,transparent 65%);animation:orbDriftA 22s ease-in-out infinite}
 .bg-orb-right{right:-160px;top:42%;width:560px;height:560px;background:radial-gradient(circle,rgba(93,63,184,.08) 0%,transparent 65%);animation:orbDriftB 26s ease-in-out infinite}
@@ -63,7 +63,7 @@ nav.scrolled{border-color:var(--line);box-shadow:0 2px 20px rgba(93,63,184,.07)}
 @keyframes bookFloat{0%,100%{transform:rotate(6deg) translate(0,0)}40%{transform:rotate(3deg) translate(-10px,-12px)}70%{transform:rotate(8deg) translate(6px,6px)}}
 
 /* ══ WHO WE ARE ══ */
-.wwa-sec{background:#fff;padding:100px 0 108px;position:relative;overflow:hidden}
+.wwa-sec{background:#fff;padding:32px 0 108px;position:relative;overflow:hidden}
 .wwa-sec::before{content:'';position:absolute;top:-80px;right:-80px;width:440px;height:440px;background:radial-gradient(circle,rgba(184,164,240,.07),transparent 65%);pointer-events:none}
 
 .wwa-hd{text-align:center;max-width:680px;margin:0 auto 68px;padding:0 52px}
@@ -76,11 +76,24 @@ nav.scrolled{border-color:var(--line);box-shadow:0 2px 20px rgba(93,63,184,.07)}
 
 .wwa-body{max-width:1200px;margin:0 auto;padding:0 52px;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
 
-/* — image column: NO purple bg blob, NO hover transforms — just the raw image — */
-.wwa-img-col{position:relative;display:flex;align-items:center;justify-content:center}
-.wwa-img{position:relative;width:100%;max-width:480px;height:auto;object-fit:contain;mix-blend-mode:multiply;filter:drop-shadow(0 18px 38px rgba(93,63,184,.10))}
 
-/* — right column heading sized to fit "We're not building another school app." on ONE line — */
+.wwa-img-col{
+  position:relative;
+  display:flex;
+  align-items:center;       /* center image within the stretched column */
+  justify-content:center;
+}
+.wwa-img{
+  position:relative;
+  width:100%;
+  max-width:460px;
+  max-height:560px;
+  height:auto;
+  display:block;
+  object-fit:contain;
+  mix-blend-mode:multiply;
+  filter:drop-shadow(0 18px 38px rgba(93,63,184,.10));
+}
 .wwa-right h3{font-family:'Playfair Display',serif;font-size:clamp(20px,2vw,28px);font-weight:800;color:var(--ink);line-height:1.15;letter-spacing:-.025em;margin-bottom:18px}
 .wwa-right h3 em{font-style:italic;color:var(--p700)}
 .wwa-right>p{font-size:15px;color:var(--ink2);line-height:1.78;margin-bottom:30px}
