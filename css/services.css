@@ -1373,9 +1373,52 @@ nav.menu-open .mobile-drawer {
 
 
 /* ================================================= */
-/* GLOBAL FOOTER RESPONSIVE MEDIA QUERIES */
-/* Use this same footer CSS on every page */
+/* GLOBAL FOOTER RESPONSIVE FIX */
+/* Paste this at the VERY END of every page CSS */
 /* ================================================= */
+
+/* ---------- Base footer structure safety ---------- */
+footer .fw {
+  width: min(100% - 64px, 1120px);
+  margin-inline: auto;
+}
+
+footer .f-top {
+  margin-bottom: 46px;
+}
+
+footer .fgrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 44px 56px;
+}
+
+footer .fcol {
+  min-width: 0;
+}
+
+footer .fcol ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+footer .fcol a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  text-decoration: none;
+}
+
+footer .fcol a svg {
+  flex: 0 0 auto;
+}
+
+footer .fbot {
+  margin-top: 48px;
+  padding-top: 24px;
+}
 
 
 /* ---------- Large tablets / small laptops ---------- */
@@ -1386,7 +1429,7 @@ nav.menu-open .mobile-drawer {
 
   footer .fw {
     width: min(100% - 48px, 1120px);
-    margin: 0 auto;
+    margin-inline: auto;
   }
 
   footer .f-top {
@@ -1394,7 +1437,8 @@ nav.menu-open .mobile-drawer {
     margin-bottom: 42px;
   }
 
-  footer .f-brand-name {
+  footer .f-brand-name,
+  footer .fbrand-name {
     font-size: clamp(30px, 4vw, 46px);
   }
 
@@ -1405,7 +1449,8 @@ nav.menu-open .mobile-drawer {
   }
 
   footer .fgrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 38px 56px;
   }
 
@@ -1428,25 +1473,28 @@ nav.menu-open .mobile-drawer {
 
   footer .fw {
     width: min(100% - 36px, 720px);
+    margin-inline: auto;
   }
 
   footer .f-top {
     margin-bottom: 38px;
   }
 
-  footer .f-brand-name {
+  footer .f-brand-name,
+  footer .fbrand-name {
     font-size: 34px;
     line-height: 1.05;
   }
 
   footer .f-tagline {
+    max-width: 100%;
     font-size: 14.5px;
     line-height: 1.75;
-    max-width: 100%;
   }
 
   footer .fgrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 34px 42px;
   }
 
@@ -1490,14 +1538,17 @@ nav.menu-open .mobile-drawer {
 
   footer .fw {
     width: calc(100% - 32px);
+    margin-inline: auto;
   }
 
   footer .f-top {
     margin-bottom: 34px;
   }
 
-  footer .f-brand-name {
+  footer .f-brand-name,
+  footer .fbrand-name {
     font-size: 30px;
+    line-height: 1.05;
     letter-spacing: .02em;
   }
 
@@ -1507,13 +1558,18 @@ nav.menu-open .mobile-drawer {
   }
 
   /*
-    Important:
-    Keep 2 columns on normal phones.
-    This matches the PROV/O screenshot style.
+    IMPORTANT:
+    Force 2 columns on normal phones.
+    This makes home page footer match demo page footer.
   */
   footer .fgrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 32px 26px;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 32px 26px !important;
+  }
+
+  footer .fcol {
+    min-width: 0;
   }
 
   footer .fcol h4 {
@@ -1523,6 +1579,8 @@ nav.menu-open .mobile-drawer {
   }
 
   footer .fcol ul {
+    display: flex;
+    flex-direction: column;
     gap: 11px;
   }
 
@@ -1530,17 +1588,20 @@ nav.menu-open .mobile-drawer {
     font-size: 14px;
     line-height: 1.45;
     word-break: normal;
+    overflow-wrap: anywhere;
   }
 
   footer .fcol a svg {
     width: 15px;
     height: 15px;
+    flex-shrink: 0;
   }
 
   footer .fbot {
     margin-top: 34px;
     padding-top: 20px;
     font-size: 12.8px;
+    line-height: 1.6;
     text-align: left;
   }
 }
@@ -1552,13 +1613,17 @@ nav.menu-open .mobile-drawer {
     width: calc(100% - 24px);
   }
 
+  /*
+    Only below 340px we allow single column,
+    because 2 columns become too tight.
+  */
   footer .fgrid {
-    grid-template-columns: 1fr;
-    gap: 28px;
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
   }
 
-  footer .fbrand-name,
-  footer .f-brand-name {
+  footer .f-brand-name,
+  footer .fbrand-name {
     font-size: 28px;
   }
 

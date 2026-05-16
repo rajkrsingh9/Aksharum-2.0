@@ -996,109 +996,1313 @@ footer{background:var(--p900);padding:48px 0 0}
 }
 
 
+/* ──────────────────────────────────────────────────────────────────────────
+   GLOBAL: stacking context fix for drawer
+   The earlier `* { z-index: 1 }` rule fights drawer z-indices
+   ────────────────────────────────────────────────────────────────────────── */
+nav, nav *, nav *::before, nav *::after { z-index: auto !important; }
+.nav-overlay { z-index: 4998 !important; }
+.mobile-drawer { z-index: 4999 !important; }
+nav.menu-open { z-index: 5000 !important; }
 
 
-/* ══ FAQ ══ */
-.faq-sec{
-  background:var(--p50);
-  padding:88px 0 100px;
-  position:relative;overflow:hidden;
-}
-.faq-sec::after{
-  content:'';position:absolute;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  width:700px;height:600px;
-  background:radial-gradient(ellipse,rgba(184,164,240,.06) 0%,transparent 68%);
-  pointer-events:none;z-index:0;
-}
-.faq-inner{
-  max-width:780px;margin:0 auto;
-  padding:0 52px;
-  position:relative;z-index:1;
-}
-.faq-hd{text-align:center;margin-bottom:52px}
-.faq-ey{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:11px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.13em;color:var(--p600);margin-bottom:14px;
-}
-.faq-ey::before,.faq-ey::after{content:'';width:18px;height:2px;background:var(--p500);border-radius:2px}
-.faq-hd h2{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(28px,3.4vw,44px);font-weight:800;
-  color:var(--ink);line-height:1.05;letter-spacing:-.03em;margin-bottom:12px;
-}
-.faq-hd h2 em{font-style:italic;color:var(--p700)}
-.faq-hd p{font-size:15px;color:var(--ink3);max-width:380px;margin:0 auto;line-height:1.7}
+/* ──────────────────────────────────────────────────────────────────────────
+   MOBILE DRAWER STYLES
+   ────────────────────────────────────────────────────────────────────────── */
 
-/* accordion using details/summary */
-.faq-list{display:flex;flex-direction:column}
+.nav-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: var(--p100);
+  border: 1px solid var(--line);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  transition: background .25s ease, transform .25s ease;
+  flex-shrink: 0;
+}
+.nav-toggle span {
+  width: 18px;
+  height: 2px;
+  background: var(--p700);
+  border-radius: 999px;
+}
+.nav-toggle:hover { background: var(--p200); transform: translateY(-1px); }
 
-details.faq-item{
-  border-bottom:1px solid var(--line);
-  background:transparent;
-}
-details.faq-item:first-of-type{border-top:1px solid var(--line)}
-
-details.faq-item summary{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:20px;padding:22px 0;
-  cursor:pointer;
-  list-style:none;
-  -webkit-appearance:none;
-}
-details.faq-item summary::-webkit-details-marker{display:none}
-details.faq-item summary::marker{display:none}
-
-.faq-q-text{
-  font-size:15.5px;font-weight:600;color:var(--ink);
-  line-height:1.4;flex:1;
-  font-family:'DM Sans',sans-serif;
-  transition:color .3s;
-}
-details.faq-item[open] .faq-q-text{color:var(--p700)}
-
-/* toggle circle with +/- */
-.faq-icon{
-  width:34px;height:34px;border-radius:50%;flex-shrink:0;
-  background:#fff;border:1.5px solid var(--p200);
-  display:grid;place-items:center;
-  transition:all .3s cubic-bezier(.175,.885,.32,1.275);
-  position:relative;
-}
-/* horizontal bar always visible */
-.faq-icon::before{
-  content:'';position:absolute;
-  width:12px;height:2px;
-  background:var(--p600);border-radius:2px;
-  transition:background .3s;
-}
-/* vertical bar — hidden when open */
-.faq-icon::after{
-  content:'';position:absolute;
-  width:2px;height:12px;
-  background:var(--p600);border-radius:2px;
-  transition:opacity .3s,transform .3s,background .3s;
-}
-details.faq-item[open] .faq-icon{
-  background:var(--p700);border-color:var(--p700);
-}
-details.faq-item[open] .faq-icon::before{background:#fff}
-details.faq-item[open] .faq-icon::after{
-  background:#fff;
-  opacity:0;
-  transform:rotate(90deg);
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 14, 35, .55);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .3s ease, visibility .3s ease;
 }
 
-/* answer */
-.faq-ans{
-  padding:0 0 20px;
-  font-size:14.5px;color:var(--ink3);
-  line-height:1.78;
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(86vw, 360px);
+  height: 100dvh;
+  background: #fff;
+  border-left: 1px solid var(--line);
+  box-shadow: -28px 0 80px rgba(20, 14, 35, .24);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(105%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform .42s cubic-bezier(.4, 0, .2, 1), opacity .25s ease, visibility .25s ease;
 }
-.faq-ans strong{color:var(--ink);font-weight:600}
 
-@media(max-width:720px){
-  .faq-inner{padding:0 20px}
-  .faq-q-text{font-size:14px}
+nav.menu-open .nav-overlay { opacity: 1; visibility: visible; pointer-events: auto; }
+nav.menu-open .mobile-drawer { transform: translateX(0); opacity: 1; visibility: visible; pointer-events: auto; }
+
+.drawer-head {
+  height: 72px;
+  padding: 0 18px 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.drawer-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 19px; font-weight: 800; color: var(--ink);
+}
+.drawer-logo span { color: var(--p600); }
+
+.drawer-close {
+  width: 42px; height: 42px; border-radius: 999px;
+  background: var(--p100); border: 1px solid var(--line);
+  position: relative; cursor: pointer;
+  transition: background .25s ease;
+}
+.drawer-close:hover { background: var(--p200); }
+.drawer-close span {
+  position: absolute; left: 50%; top: 50%;
+  width: 18px; height: 2px;
+  background: var(--p700); border-radius: 999px;
+}
+.drawer-close span:first-child { transform: translate(-50%, -50%) rotate(45deg); }
+.drawer-close span:last-child  { transform: translate(-50%, -50%) rotate(-45deg); }
+
+.drawer-links {
+  flex: 1; padding: 32px 18px 24px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.drawer-links a {
+  padding: 14px 18px; border-radius: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink); border: 1px solid transparent;
+  transition: background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease;
+}
+.drawer-links a:hover,
+.drawer-links a.active {
+  background: var(--p100); border-color: var(--p200);
+  color: var(--p700); transform: translateX(3px);
+}
+
+.drawer-bottom { padding: 18px 18px 24px; border-top: 1px solid var(--line); }
+.drawer-demo {
+  width: 100%; min-height: 48px; border-radius: 14px;
+  background: var(--p700); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 800;
+  letter-spacing: .04em; text-transform: uppercase;
+  box-shadow: 0 10px 24px rgba(93, 63, 184, .28);
+  transition: background .25s ease, transform .25s ease;
+}
+.drawer-demo:hover { background: var(--p800); transform: translateY(-1px); }
+
+
+/* ==========================================================================
+   1. ULTRA WIDE (1800px+)
+   ========================================================================== */
+@media (min-width: 1800px) {
+  .nw, .fw, .stats-inner, .feat-inner, .trust-inner, .testi-inner { max-width: 1440px; }
+  .prob-inner { max-width: 1560px; }
+}
+
+
+/* ==========================================================================
+   2. LARGE DESKTOP (1600px)
+   ========================================================================== */
+@media (max-width: 1600px) {
+  .nw { max-width: 1320px; }
+  .hero-left h1 { font-size: clamp(40px, 4.2vw, 60px); }
+}
+
+
+/* ==========================================================================
+   3. STANDARD DESKTOP (1400px)
+   ========================================================================== */
+@media (max-width: 1400px) {
+  .nw,
+  .prob-inner, .feat-inner, .trust-inner, .testi-inner,
+  .stats-inner, .fw,
+  .sol-hd, .tailored-hd, .tailored-body {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .hero-left { padding-left: 40px; }
+}
+
+
+/* ==========================================================================
+   4. LAPTOP (1200px)
+   ========================================================================== */
+@media (max-width: 1200px) {
+  .nw { padding: 0 32px; gap: 12px; }
+  .nlinks a { padding: 7px 11px; font-size: 13.5px; }
+  .n-demo { padding: 9px 18px; font-size: 13.5px; }
+
+  .prob-inner, .feat-inner, .trust-inner, .testi-inner,
+  .stats-inner, .fw,
+  .sol-hd, .tailored-hd, .tailored-body {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  .hero-left { padding-left: 32px; }
+
+  .hero-left h1 { font-size: clamp(38px, 4vw, 54px); }
+  .dash { width: 360px; }
+  .student-col img { height: 320px; }
+}
+
+
+/* ==========================================================================
+   5. TABLET LANDSCAPE / SMALL LAPTOP (1100px) — HERO STACKS
+   This is where dashboard becomes square (3-col stats)
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .hero {
+    min-height: auto !important;
+    padding: 0 0 56px !important;
+    flex-direction: column !important;
+  }
+  .hero-left {
+    width: 100% !important;
+    padding: 56px 32px 0 !important;
+    text-align: center;
+  }
+  .hero-left h1 { font-size: clamp(34px, 6vw, 50px); }
+  .hero-desc { margin-left: auto; margin-right: auto; }
+  .hero-btns { justify-content: center; }
+
+  .hero-right {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    margin-top: 32px !important;
+  }
+  .blob-svg { display: none !important; }
+
+  /* DASH AREA — student + dashboard stacked vertically, both centered */
+  .dash-area {
+    position: relative !important;
+    inset: auto !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    padding: 0 24px !important;
+  }
+  .student-col {
+    align-self: center !important;
+    margin-right: 0 !important;
+  }
+  .student-col img { height: 220px !important; }
+
+  /* ═══ DASHBOARD CARD — 3-COL STATS = SQUARE SHAPE ═══ */
+  .dash {
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+    padding: 20px 18px 16px !important;
+  }
+  .dash-top { margin-bottom: 14px !important; }
+  .dash-title { font-size: 15px !important; }
+  .dash-sub { font-size: 11px !important; }
+
+  /* THIS IS THE KEY FIX — 3 columns, 2 rows = square card */
+  .stat-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+  }
+  .dsc {
+    padding: 11px 7px !important;
+    border-radius: 11px !important;
+  }
+  .dsc-ico {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 9px !important;
+    margin-bottom: 6px !important;
+  }
+  .dsc-ico svg { width: 15px !important; height: 15px !important; }
+  .dsc-val { font-size: 17px !important; }
+  .dsc-lbl { font-size: 9.5px !important; margin-top: 1px !important; }
+
+  /* Chart shorter so total card stays balanced */
+  .chart-hd { margin-bottom: 6px !important; }
+  .chart-ttl { font-size: 12px !important; }
+  .chart-bdg { font-size: 10px !important; padding: 2px 7px !important; }
+  .bars { height: 42px !important; gap: 4px !important; }
+  .bar-lbls span { font-size: 9px !important; }
+
+  /* Chips reposition */
+  .notif-chip { right: 0 !important; top: -14px !important; padding: 9px 12px !important; }
+  .enroll-chip { left: 0 !important; bottom: -8px !important; padding: 9px 12px !important; }
+  .chip-txt strong { font-size: 11.5px !important; }
+  .chip-txt span { font-size: 10.5px !important; }
+
+  /* ═══ SOLUTION — orb fluid, cards centered single column ═══ */
+  .sol-sec { min-height: auto !important; padding: 60px 0 64px !important; }
+  .sol-stage {
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    gap: 32px !important;
+    padding: 0 24px !important;
+  }
+  .sol-center {
+    order: -1 !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+  .sol-orb {
+    width: min(300px, 75vw) !important;
+    height: min(300px, 75vw) !important;
+    max-width: 100% !important;
+    flex-shrink: 1 !important;
+  }
+  .sol-img {
+    width: 84% !important;
+    max-width: 260px !important;
+    height: auto !important;
+  }
+  .sring.r1 { inset: -16px !important; }
+  .sring.r2 { inset: -32px !important; }
+
+  .sol-col {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 14px !important;
+    width: 100% !important;
+    max-width: 420px !important;
+    padding: 0 !important;
+  }
+  .sc {
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    margin: 0 !important;
+  }
+  .sc-desc { -webkit-line-clamp: 3 !important; }
+
+  /* Stats 4-col → 2-col */
+  .stats-inner { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+
+/* ==========================================================================
+   6. HAMBURGER DRAWER KICKS IN (900px)
+   ========================================================================== */
+@media (max-width: 900px) {
+  .nw {
+    height: 64px !important;
+    padding: 0 20px !important;
+  }
+  .logo { font-size: 18px; }
+  .lbox { width: 34px; height: 34px; }
+
+  .nw > .nlinks,
+  .nw > .nright {
+    display: none !important;
+  }
+
+  .nav-toggle {
+    display: flex !important;
+    margin-left: auto;
+  }
+
+  body.nav-lock { overflow: hidden; }
+
+  /* PROBLEM cards single column */
+  .prob-cards {
+    grid-template-columns: 1fr !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+  }
+
+  /* FEATURES 6-card 2-col */
+  .feat-grid-6 { grid-template-columns: 1fr 1fr !important; }
+
+  /* ═══ TAILORED — IMAGE ABOVE, CENTERED ═══ */
+  .tailored-body {
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    gap: 32px !important;
+    max-width: 560px !important;
+    margin: 0 auto !important;
+  }
+  .tailored-img-col {
+    display: flex !important;
+    order: -1 !important;
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .tailored-img-bg { display: none !important; }
+  .tailored-img {
+    width: auto !important;
+    max-width: 280px !important;
+    max-height: 400px !important;
+    height: auto !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+    mix-blend-mode: normal !important;
+    display: block !important;
+  }
+  .tailored-roles {
+    width: 100% !important;
+    max-width: 480px !important;
+  }
+  .tailored-roles::before { left: 19px !important; }
+
+  /* TRUST + TESTIMONIALS single column */
+  .trust-grid { grid-template-columns: 1fr !important; }
+  .testi-grid { grid-template-columns: 1fr !important; }
+
+  .fgrid { grid-template-columns: 1fr 1fr !important; }
+}
+
+
+/* ==========================================================================
+   7. TABLET PORTRAIT (880px)
+   ========================================================================== */
+@media (max-width: 880px) {
+  .nw { padding: 0 24px !important; }
+  .prob-inner, .feat-inner, .trust-inner, .testi-inner,
+  .stats-inner, .fw,
+  .sol-hd, .tailored-hd, .tailored-body {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+  .hero-left { padding: 44px 24px 0 !important; }
+
+  .prob-sec, .feat-sec, .tailored-sec, .trust-sec, .testi-sec {
+    padding-top: 64px !important;
+    padding-bottom: 72px !important;
+  }
+  .prob-hd, .feat-hd, .trust-hd, .testi-hd, .tailored-hd, .sol-hd {
+    margin-bottom: 40px !important;
+  }
+
+  .hero-left h1 { font-size: clamp(30px, 6.5vw, 44px); }
+  .hero-desc { font-size: 15.5px; }
+  .student-col img { height: 200px !important; }
+}
+
+
+/* ==========================================================================
+   8. LARGE MOBILE (768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .nw { padding: 0 20px !important; }
+  .prob-inner, .feat-inner, .trust-inner, .testi-inner,
+  .stats-inner, .fw,
+  .sol-hd, .tailored-hd, .tailored-body {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .hero-left { padding: 40px 20px 0 !important; }
+
+  .hero { padding-bottom: 48px !important; }
+  .hero-left h1 { font-size: clamp(28px, 7.5vw, 38px); margin-bottom: 18px; }
+  .hero-desc { font-size: 15px; margin-bottom: 28px; }
+  .hero-btns { gap: 10px; }
+  .btn-white, .btn-ghost {
+    flex: 1;
+    justify-content: center;
+    min-width: 0;
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+
+  /* Dashboard STILL 3-col, just smaller */
+  .student-col img { height: 180px !important; }
+  .dash {
+    max-width: 360px !important;
+    padding: 18px 16px 14px !important;
+  }
+  .stat-grid { gap: 7px !important; }
+  .dsc { padding: 10px 6px !important; }
+  .dsc-val { font-size: 16px !important; }
+  .dsc-lbl { font-size: 9px !important; }
+  .bars { height: 40px !important; }
+
+  /* FEATURES single column */
+  .feat-grid-6 { grid-template-columns: 1fr !important; }
+
+  /* Tailored smaller */
+  .tailored-img {
+    max-width: 240px !important;
+    max-height: 340px !important;
+  }
+
+  .stats-inner { grid-template-columns: repeat(2, 1fr) !important; gap: 18px !important; }
+  .fgrid { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
+  .feat-cta { flex-direction: column; align-items: flex-start; gap: 14px; }
+}
+
+
+/* ==========================================================================
+   9. STANDARD MOBILE (640px)
+   ========================================================================== */
+@media (max-width: 640px) {
+  .nw { padding: 0 16px !important; }
+  .prob-inner, .feat-inner, .trust-inner, .testi-inner,
+  .stats-inner, .fw,
+  .sol-hd, .tailored-hd, .tailored-body {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .hero-left { padding: 36px 16px 0 !important; }
+
+  .prob-sec, .feat-sec, .tailored-sec, .trust-sec, .testi-sec {
+    padding-top: 56px !important;
+    padding-bottom: 64px !important;
+  }
+
+  .hero-left h1 { font-size: clamp(26px, 8vw, 34px); }
+  .hero-desc { font-size: 14.5px; line-height: 1.7; }
+
+  .student-col img { height: 160px !important; }
+
+  /* Solution orb smaller */
+  .sol-orb {
+    width: min(240px, 68vw) !important;
+    height: min(240px, 68vw) !important;
+  }
+  .sol-img { max-width: 200px !important; }
+  .sring.r1 { inset: -12px !important; }
+  .sring.r2 { inset: -24px !important; }
+
+  /* Tailored smaller */
+  .tailored-img {
+    max-width: 210px !important;
+    max-height: 300px !important;
+  }
+  .t-name { font-size: 18px; }
+  .t-role { gap: 18px; }
+
+  .pcard { padding: 30px 22px 26px; }
+  .fg-card { padding: 30px 22px 26px; }
+  .tcard { padding: 32px 22px 26px; }
+  .tcard2 { padding: 28px 20px 22px; }
+
+  .stats-inner { grid-template-columns: 1fr 1fr !important; }
+  .fgrid { grid-template-columns: 1fr 1fr !important; gap: 22px !important; }
+}
+
+
+/* ==========================================================================
+   10. SMALL MOBILE (480px) — iPhone SE / standard small phones
+   ========================================================================== */
+@media (max-width: 480px) {
+  .nw { height: 60px !important; padding: 0 14px !important; }
+  .prob-inner, .feat-inner, .trust-inner, .testi-inner,
+  .stats-inner, .fw,
+  .sol-hd, .tailored-hd, .tailored-body {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+  .hero-left { padding: 32px 14px 0 !important; }
+
+  .hero-left h1 { font-size: clamp(24px, 8.5vw, 30px); line-height: 1.14; }
+  .hero-desc { font-size: 14px; margin-bottom: 24px; }
+  .hero-btns { flex-direction: column; align-items: stretch; }
+  .btn-white, .btn-ghost { width: 100% !important; }
+
+  /* Dashboard at 375px — STILL 3-col, ultra compact */
+  .student-col img { height: 140px !important; }
+  .dash {
+    max-width: 100% !important;
+    padding: 16px 14px 12px !important;
+  }
+  .dash-top { margin-bottom: 12px !important; }
+  .dash-title { font-size: 14px !important; }
+  .stat-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+  }
+  .dsc {
+    padding: 9px 5px !important;
+    border-radius: 10px !important;
+  }
+  .dsc-ico {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 8px !important;
+    margin-bottom: 5px !important;
+  }
+  .dsc-ico svg { width: 13px !important; height: 13px !important; }
+  .dsc-val { font-size: 15px !important; }
+  .dsc-lbl { font-size: 8.5px !important; }
+  .chart-ttl { font-size: 11.5px !important; }
+  .chart-bdg { font-size: 9.5px !important; padding: 2px 6px !important; }
+  .bars { height: 36px !important; gap: 4px !important; }
+  .bar-lbls span { font-size: 8.5px !important; }
+
+  /* Hide chips — they crowd the 375px viewport */
+  .notif-chip, .enroll-chip { display: none !important; }
+
+  /* Solution orb at iPhone SE size */
+  .sol-orb {
+    width: min(210px, 65vw) !important;
+    height: min(210px, 65vw) !important;
+  }
+  .sol-img { max-width: 180px !important; }
+  .sring.r1 { inset: -10px !important; }
+  .sring.r2 { inset: -20px !important; }
+
+  /* Tailored compact */
+  .tailored-img {
+    max-width: 190px !important;
+    max-height: 260px !important;
+  }
+  .t-dot { width: 36px; height: 36px; }
+  .tailored-roles::before { left: 17px; }
+
+  /* Headings */
+  .prob-hd h2, .feat-hd h2, .trust-hd h2,
+  .testi-hd h2, .tailored-hd h2 { font-size: clamp(22px, 7.5vw, 28px); }
+  .pcard h3, .fg-card h3, .tcard h3 { font-size: 17px; }
+
+  .stats-inner { grid-template-columns: 1fr 1fr !important; }
+  .snum { font-size: clamp(28px, 9vw, 36px); }
+  .fgrid { grid-template-columns: 1fr !important; gap: 22px !important; }
+}
+
+
+/* ==========================================================================
+   11. SMALL PHONE (420px) — drawer adjustments
+   ========================================================================== */
+@media (max-width: 420px) {
+  .nw { padding: 0 16px !important; }
+  .logo { font-size: 17px; gap: 8px; }
+  .lbox { width: 32px; height: 32px; }
+
+  .nav-toggle, .drawer-close { width: 40px; height: 40px; }
+  .mobile-drawer { width: 88vw; }
+  .drawer-head { height: 64px; padding-left: 18px; }
+  .drawer-links { padding-top: 26px; }
+  .drawer-links a { padding: 13px 16px; font-size: 13.5px; }
+}
+
+
+/* ==========================================================================
+   12. EXTRA SMALL (380px) — Galaxy Fold, older Android
+   ========================================================================== */
+@media (max-width: 380px) {
+  .prob-inner, .feat-inner, .trust-inner, .testi-inner,
+  .stats-inner, .fw,
+  .sol-hd, .tailored-hd, .tailored-body {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .hero-left { padding: 28px 12px 0 !important; }
+
+  .hero-left h1 { font-size: 22px; }
+  .hero-desc { font-size: 13.5px; }
+
+  .student-col img { height: 130px !important; }
+
+  /* Dashboard ultra-compact */
+  .dash { padding: 14px 12px 10px !important; }
+  .stat-grid { gap: 5px !important; }
+  .dsc { padding: 8px 4px !important; }
+  .dsc-ico { width: 24px !important; height: 24px !important; margin-bottom: 4px !important; }
+  .dsc-val { font-size: 14px !important; }
+  .dsc-lbl { font-size: 8px !important; }
+
+  .sol-orb {
+    width: min(180px, 60vw) !important;
+    height: min(180px, 60vw) !important;
+  }
+  .sol-img { max-width: 155px !important; }
+  .tailored-img {
+    max-width: 170px !important;
+    max-height: 230px !important;
+  }
+
+  .pcard, .fg-card, .tcard, .tcard2 { padding: 22px 16px !important; }
+}
+
+
+/* ==========================================================================
+   13. IPAD MINI / AIR / PRO 11" PORTRAIT (768-900px)
+   Hero already stacked from 1100, but spacing tweaks
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
+  .hero-left { padding: 56px 32px 0 !important; }
+  .hero-left h1 { font-size: clamp(34px, 5.5vw, 46px); }
+  .student-col img { height: 260px !important; }
+  .dash { max-width: 460px !important; }
+  .stat-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+  }
+  .dsc { padding: 14px 12px !important; }
+  .dsc-val { font-size: 20px !important; }
+  .dsc-lbl { font-size: 11px !important; }
+
+  /* Solution orb bigger on iPad portrait */
+  .sol-orb {
+    width: min(340px, 50vw) !important;
+    height: min(340px, 50vw) !important;
+  }
+  .sol-img { max-width: 300px !important; }
+  .sc { max-width: 460px !important; }
+
+  /* Tailored image bigger but capped */
+  .tailored-img {
+    max-width: 320px !important;
+    max-height: 440px !important;
+  }
+
+  .feat-grid-6 { grid-template-columns: 1fr 1fr !important; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+
+/* ==========================================================================
+   14. IPAD PRO 12.9" PORTRAIT (1000-1100px)
+   ========================================================================== */
+@media (min-width: 1000px) and (max-width: 1100px) and (orientation: portrait) {
+  .hero {
+    flex-direction: column !important;
+    min-height: auto !important;
+    padding-bottom: 60px !important;
+  }
+  .hero-left {
+    width: 100% !important;
+    text-align: center;
+    padding: 56px 40px 0 !important;
+  }
+  .hero-left h1 { font-size: clamp(40px, 5vw, 56px); }
+  .hero-desc { margin-left: auto; margin-right: auto; }
+  .hero-btns { justify-content: center; }
+  .hero-right {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    margin-top: 32px !important;
+  }
+  .blob-svg { display: none !important; }
+
+  .dash-area {
+    position: relative !important;
+    inset: auto !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+  }
+  .student-col {
+    align-self: center !important;
+    margin-right: 0 !important;
+  }
+  .student-col img { height: 300px !important; }
+  .dash { max-width: 500px !important; }
+  .stat-grid { grid-template-columns: repeat(3, 1fr) !important; }
+
+  .sol-stage {
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    max-width: 720px !important;
+    margin: 0 auto !important;
+    gap: 32px !important;
+  }
+  .sol-center { order: -1 !important; }
+  .sol-orb {
+    width: min(360px, 45vw) !important;
+    height: min(360px, 45vw) !important;
+  }
+  .sol-col { align-items: center !important; }
+
+  .tailored-body {
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    max-width: 720px !important;
+    margin: 0 auto !important;
+    gap: 36px !important;
+  }
+  .tailored-img-col {
+    display: flex !important;
+    order: -1 !important;
+    justify-content: center !important;
+  }
+  .tailored-img-bg { display: none !important; }
+  .tailored-img {
+    max-width: 340px !important;
+    max-height: 460px !important;
+    margin: 0 auto !important;
+    mix-blend-mode: normal !important;
+  }
+
+  .feat-grid-6 { grid-template-columns: 1fr 1fr !important; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+
+/* ==========================================================================
+   15. TOUCH DEVICES — disable hover transforms
+   ========================================================================== */
+@media (hover: none) and (pointer: coarse) {
+  .pcard:hover, .fg-card:hover, .tcard:hover, .tcard2:hover,
+  .sc:hover, .t-role:hover, .dsc:hover {
+    transform: none !important;
+  }
+
+  .n-demo, .nav-toggle, .drawer-close, .drawer-demo,
+  .btn-white, .btn-ghost, .btn-feat-know {
+    min-height: 44px;
+  }
+}
+
+
+/* ==========================================================================
+   16. REDUCED MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .student-col img, .dash, .notif-chip, .enroll-chip,
+  .sol-img, .tailored-img, .sol-orb::before {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 380px) {
+    .student-col img {
+        height: 178px !important;
+    }
+}
+
+@media (max-width: 1100px) {
+ 
+  /* Force vertical stacking with center alignment */
+  section.sol-sec .sol-stage,
+  .sol-sec .sol-stage {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 32px !important;
+    padding: 0 20px !important;
+    grid-template-columns: none !important;
+  }
+ 
+  /* IMAGE FIRST */
+  section.sol-sec .sol-center,
+  .sol-sec .sol-center {
+    order: -1 !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+  }
+ 
+  /* Orb container — fluid, never overflows */
+  section.sol-sec .sol-orb,
+  .sol-sec .sol-orb {
+    width: min(260px, 70vw) !important;
+    height: min(260px, 70vw) !important;
+    max-width: 280px !important;
+    max-height: 280px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    margin: 0 auto !important;
+    flex-shrink: 0 !important;
+  }
+ 
+  /* THE FIX — image clamped inside orb, never breaks out */
+  section.sol-sec .sol-center img,
+  section.sol-sec .sol-orb img,
+  section.sol-sec .sol-img,
+  .sol-sec .sol-img {
+    width: 80% !important;
+    max-width: 220px !important;
+    height: auto !important;
+    max-height: 220px !important;
+    object-fit: contain !important;
+    position: relative !important;
+    z-index: 10 !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+ 
+  /* Rings contained */
+  section.sol-sec .sring.r1 { inset: -14px !important; }
+  section.sol-sec .sring.r2 { inset: -28px !important; }
+ 
+  /* CARDS one-by-one (single column), centered, then they appear AFTER image */
+  section.sol-sec .sol-col,
+  .sol-sec .sol-col {
+    order: 1 !important;
+    width: 100% !important;
+    max-width: 420px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+  }
+ 
+  section.sol-sec .sc,
+  .sol-sec .sc {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+  }
+  section.sol-sec .sc-desc { -webkit-line-clamp: 3 !important; }
+ 
+  /* Header tighter so image is clearly separated */
+  section.sol-sec .sol-hd { margin-bottom: 24px !important; padding: 0 24px !important; }
+}
+ 
+ 
+/* ──────────────────────────────────────────────────────────────────────────
+   TAILORED — IMAGE PROPERLY CENTERED, ABOVE CONTENT
+   ────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+ 
+  /* The body — flex column with TRUE center alignment */
+  section.tailored-sec .tailored-body,
+  .tailored-sec .tailored-body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 36px !important;
+    max-width: 560px !important;
+    margin: 0 auto !important;
+    padding: 0 20px !important;
+    grid-template-columns: none !important;
+    text-align: center !important;
+  }
+ 
+  /* Image column — forced visible, centered, on TOP */
+  section.tailored-sec .tailored-img-col,
+  .tailored-sec .tailored-img-col {
+    display: flex !important;
+    order: -1 !important;
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+    position: relative !important;
+    text-align: center !important;
+  }
+ 
+  /* Hide the dashed bg circle that was pushing it left */
+  section.tailored-sec .tailored-img-bg,
+  .tailored-sec .tailored-img-bg {
+    display: none !important;
+  }
+ 
+  /* THE IMAGE — capped width AND height, true center */
+  section.tailored-sec .tailored-img-col img,
+  section.tailored-sec .tailored-img,
+  .tailored-sec .tailored-img {
+    width: auto !important;
+    max-width: 260px !important;
+    max-height: 380px !important;
+    height: auto !important;
+    object-fit: contain !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    display: block !important;
+    mix-blend-mode: normal !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+  }
+ 
+  /* Roles list comes AFTER image, centered block */
+  section.tailored-sec .tailored-roles,
+  .tailored-sec .tailored-roles {
+    order: 1 !important;
+    width: 100% !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+    text-align: left !important;
+  }
+}
+ 
+ 
+/* ──────────────────────────────────────────────────────────────────────────
+   SMALL MOBILE (640px) — both images smaller
+   ────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  section.sol-sec .sol-orb,
+  .sol-sec .sol-orb {
+    width: min(220px, 65vw) !important;
+    height: min(220px, 65vw) !important;
+    max-width: 230px !important;
+    max-height: 230px !important;
+  }
+  section.sol-sec .sol-img,
+  .sol-sec .sol-img {
+    max-width: 180px !important;
+    max-height: 180px !important;
+  }
+  section.sol-sec .sring.r1 { inset: -10px !important; }
+  section.sol-sec .sring.r2 { inset: -20px !important; }
+ 
+  section.tailored-sec .tailored-img,
+  .tailored-sec .tailored-img {
+    max-width: 220px !important;
+    max-height: 320px !important;
+  }
+}
+ 
+ 
+/* ──────────────────────────────────────────────────────────────────────────
+   iPHONE SE / SMALL MOBILE (480px) — extra compact
+   ────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  section.sol-sec .sol-orb,
+  .sol-sec .sol-orb {
+    width: min(190px, 60vw) !important;
+    height: min(190px, 60vw) !important;
+    max-width: 200px !important;
+    max-height: 200px !important;
+  }
+  section.sol-sec .sol-img,
+  .sol-sec .sol-img {
+    max-width: 160px !important;
+    max-height: 160px !important;
+  }
+  section.sol-sec .sring.r1 { inset: -8px !important; }
+  section.sol-sec .sring.r2 { inset: -16px !important; }
+  section.sol-sec .sol-hd h2 { font-size: clamp(22px, 7vw, 28px) !important; }
+  section.sol-sec .sol-hd p { font-size: 13.5px !important; }
+ 
+  section.tailored-sec .tailored-img,
+  .tailored-sec .tailored-img {
+    max-width: 190px !important;
+    max-height: 270px !important;
+  }
+  section.tailored-sec .tailored-body { gap: 28px !important; padding: 0 16px !important; }
+}
+ 
+ 
+/* ──────────────────────────────────────────────────────────────────────────
+   EXTRA SMALL (380px)
+   ────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 380px) {
+  section.sol-sec .sol-orb,
+  .sol-sec .sol-orb {
+    width: min(170px, 56vw) !important;
+    height: min(170px, 56vw) !important;
+  }
+  section.sol-sec .sol-img,
+  .sol-sec .sol-img {
+    max-width: 140px !important;
+    max-height: 140px !important;
+  }
+ 
+  section.tailored-sec .tailored-img,
+  .tailored-sec .tailored-img {
+    max-width: 170px !important;
+    max-height: 240px !important;
+  }
+}
+ 
+/* ================================================= */
+/* GLOBAL FOOTER RESPONSIVE FIX */
+/* Paste this at the VERY END of every page CSS */
+/* ================================================= */
+
+/* ---------- Base footer structure safety ---------- */
+footer .fw {
+  width: min(100% - 64px, 1120px);
+  margin-inline: auto;
+}
+
+footer .f-top {
+  margin-bottom: 46px;
+}
+
+footer .fgrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 44px 56px;
+}
+
+footer .fcol {
+  min-width: 0;
+}
+
+footer .fcol ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+footer .fcol a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  text-decoration: none;
+}
+
+footer .fcol a svg {
+  flex: 0 0 auto;
+}
+
+footer .fbot {
+  margin-top: 48px;
+  padding-top: 24px;
+}
+
+
+/* ---------- Large tablets / small laptops ---------- */
+@media (max-width: 1024px) {
+  footer {
+    padding: 76px 0 34px;
+  }
+
+  footer .fw {
+    width: min(100% - 48px, 1120px);
+    margin-inline: auto;
+  }
+
+  footer .f-top {
+    gap: 12px;
+    margin-bottom: 42px;
+  }
+
+  footer .f-brand-name,
+  footer .fbrand-name {
+    font-size: clamp(30px, 4vw, 46px);
+  }
+
+  footer .f-tagline {
+    max-width: 620px;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  footer .fgrid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 38px 56px;
+  }
+
+  footer .fcol h4 {
+    margin-bottom: 18px;
+  }
+
+  footer .fbot {
+    margin-top: 44px;
+    padding-top: 24px;
+  }
+}
+
+
+/* ---------- iPad / tablet portrait ---------- */
+@media (max-width: 768px) {
+  footer {
+    padding: 68px 0 30px;
+  }
+
+  footer .fw {
+    width: min(100% - 36px, 720px);
+    margin-inline: auto;
+  }
+
+  footer .f-top {
+    margin-bottom: 38px;
+  }
+
+  footer .f-brand-name,
+  footer .fbrand-name {
+    font-size: 34px;
+    line-height: 1.05;
+  }
+
+  footer .f-tagline {
+    max-width: 100%;
+    font-size: 14.5px;
+    line-height: 1.75;
+  }
+
+  footer .fgrid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 34px 42px;
+  }
+
+  footer .fcol h4 {
+    font-size: 12px;
+    letter-spacing: .18em;
+    margin-bottom: 16px;
+  }
+
+  footer .fcol ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  footer .fcol a {
+    font-size: 14.5px;
+    line-height: 1.45;
+  }
+
+  footer .fcol a svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  footer .fbot {
+    margin-top: 38px;
+    padding-top: 22px;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+}
+
+
+/* ---------- Phones like iPhone SE / 375px ---------- */
+@media (max-width: 480px) {
+  footer {
+    padding: 60px 0 26px;
+  }
+
+  footer .fw {
+    width: calc(100% - 32px);
+    margin-inline: auto;
+  }
+
+  footer .f-top {
+    margin-bottom: 34px;
+  }
+
+  footer .f-brand-name,
+  footer .fbrand-name {
+    font-size: 30px;
+    line-height: 1.05;
+    letter-spacing: .02em;
+  }
+
+  footer .f-tagline {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /*
+    IMPORTANT:
+    Force 2 columns on normal phones.
+    This makes home page footer match demo page footer.
+  */
+  footer .fgrid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 32px 26px !important;
+  }
+
+  footer .fcol {
+    min-width: 0;
+  }
+
+  footer .fcol h4 {
+    font-size: 11.5px;
+    letter-spacing: .20em;
+    margin-bottom: 15px;
+  }
+
+  footer .fcol ul {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  footer .fcol a {
+    font-size: 14px;
+    line-height: 1.45;
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
+
+  footer .fcol a svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+
+  footer .fbot {
+    margin-top: 34px;
+    padding-top: 20px;
+    font-size: 12.8px;
+    line-height: 1.6;
+    text-align: left;
+  }
+}
+
+
+/* ---------- Very small phones below 340px ---------- */
+@media (max-width: 340px) {
+  footer .fw {
+    width: calc(100% - 24px);
+  }
+
+  /*
+    Only below 340px we allow single column,
+    because 2 columns become too tight.
+  */
+  footer .fgrid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  footer .f-brand-name,
+  footer .fbrand-name {
+    font-size: 28px;
+  }
+
+  footer .fcol a {
+    font-size: 13.5px;
+  }
 }

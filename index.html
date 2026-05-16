@@ -12,13 +12,19 @@
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ════════════════════════════════════════════════════════════════
+     HOME PAGE (index.html) — REPLACE your existing
+     <nav id="nav">...</nav> with THIS entire block.
+     Only the hamburger + overlay + drawer are new.
+     ════════════════════════════════════════════════════════════════ -->
 <nav id="nav">
   <div class="nw">
-    <a href="#" class="logo">
+    <a href="index.html" class="logo">
       <div class="lbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
        <span class="logo-accent">Aksharum</span>
     </a>
+
+    <!-- desktop links -->
     <ul class="nlinks">
       <li><a href="index.html" class="active">Home</a></li>
       <li><a href="about.html">About</a></li>
@@ -26,10 +32,54 @@
       <li><a href="features.html">Features</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
+
+    <!-- desktop CTA -->
     <div class="nright">
       <a href="demo.html" class="n-demo">Book Demo</a>
     </div>
+
+    <!-- hamburger (NEW) -->
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
+
+  <!-- overlay (NEW) -->
+  <div class="nav-overlay" id="navOverlay"></div>
+
+  <!-- mobile drawer (NEW) -->
+  <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div class="drawer-head">
+      <a href="index.html" class="drawer-logo">
+        <div class="lbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+        </div>
+        <span>Aksharum</span>
+      </a>
+
+      <button class="drawer-close" id="drawerClose" aria-label="Close menu">
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <div class="drawer-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="features.html">Features</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="drawer-bottom">
+      <a href="demo.html" class="drawer-demo">Book Demo</a>
+    </div>
+  </aside>
 </nav>
 
 <!-- ════════ HERO ════════ -->
@@ -468,7 +518,7 @@
     <!-- LEFT: image + floating badges -->
     <div class="tailored-img-col" id="tailoredImg">
       <div class="tailored-img-bg"></div>
-      <img src="/Aksharum/Gemini_Generated_Image_yo6tjfyo6tjfyo6t-removebg-preview.png" alt="">
+      <img src="Gemini_Generated_Image_yo6tjfyo6tjfyo6t-removebg-preview.png" alt="">
     </div>
 
     <!-- RIGHT: role rows -->

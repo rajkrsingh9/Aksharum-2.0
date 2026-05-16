@@ -4,6 +4,65 @@ gsap.registerPlugin(ScrollTrigger);
 const nav = document.getElementById('nav');
 window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30),{passive:true});
 
+
+/* ==========================================================================
+   HOME PAGE (script.js) — MOBILE DRAWER JS
+   --------------------------------------------------------------------------
+   IMPORTANT: script.js ALREADY has these two lines near the top:
+
+     gsap.registerPlugin(ScrollTrigger);
+     const nav = document.getElementById('nav');
+     window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30),{passive:true});
+
+   Do NOT redeclare `const nav` (it already exists). Paste THIS block
+   right AFTER those existing lines. It reuses the existing `nav`.
+   ========================================================================== */
+
+/* ─── CLEAN MOBILE DRAWER NAV ─── */
+const navToggle = document.getElementById('navToggle');
+const navOverlay = document.getElementById('navOverlay');
+const mobileDrawer = document.getElementById('mobileDrawer');
+const drawerClose = document.getElementById('drawerClose');
+
+function closeMobileNav() {
+  nav?.classList.remove('menu-open');
+  document.body.classList.remove('nav-lock');
+
+  navToggle?.setAttribute('aria-expanded', 'false');
+  navToggle?.setAttribute('aria-label', 'Open menu');
+  mobileDrawer?.setAttribute('aria-hidden', 'true');
+}
+
+function openMobileNav() {
+  nav?.classList.add('menu-open');
+  document.body.classList.add('nav-lock');
+
+  navToggle?.setAttribute('aria-expanded', 'true');
+  navToggle?.setAttribute('aria-label', 'Close menu');
+  mobileDrawer?.setAttribute('aria-hidden', 'false');
+}
+
+if (nav && navToggle) {
+  navToggle.addEventListener('click', () => {
+    nav.classList.contains('menu-open') ? closeMobileNav() : openMobileNav();
+  });
+
+  drawerClose?.addEventListener('click', closeMobileNav);
+  navOverlay?.addEventListener('click', closeMobileNav);
+
+  document.querySelectorAll('.drawer-links a, .drawer-demo, .drawer-logo').forEach(link => {
+    link.addEventListener('click', closeMobileNav);
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) closeMobileNav();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMobileNav();
+  });
+}
+
 // HERO entrance
 const tl = gsap.timeline({delay:.12});
 tl.fromTo('#h-title', {autoAlpha:0,y:44},{autoAlpha:1,y:0,duration:1,ease:'power3.out'})
@@ -375,19 +434,6 @@ document.querySelectorAll('.tcard2').forEach(card=>{
   card.addEventListener('mouseleave',()=>gsap.to(card,{rotateX:0,rotateY:0,duration:.5,ease:'elastic.out(1,.5)'}));
 });
 
-
-
-
-// ── FAQ — close others when one opens ──
-document.querySelectorAll('details.faq-item').forEach(det => {
-  det.addEventListener('toggle', () => {
-    if (det.open) {
-      document.querySelectorAll('details.faq-item').forEach(other => {
-        if (other !== det) other.open = false;
-      });
-    }
-  });
-});
 
 // Scroll animations
 gsap.fromTo('#faqHd',
