@@ -451,3 +451,1089 @@ footer{background:var(--p900);padding:48px 0 0}
 
 @media(max-width:900px){.pp-wrap{grid-template-columns:1fr}.toc{display:none}.fgrid{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.nlinks{display:none}.nw,.hero,.pp-wrap,.fw{padding-left:20px;padding-right:20px}.fgrid{grid-template-columns:1fr;gap:20px}}
+
+
+/* ==========================================================================
+   CAREER PAGE — DEFINITIVE RESPONSIVE SYSTEM
+   Append at the END of career.css.
+   Uses !important on critical layout rules so it wins the cascade
+   even if old media queries are still present.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   GLOBAL FIXES
+   ========================================================================== */
+
+/* Your reset has z-index:1 on EVERYTHING — that breaks drawer/overlay stacking */
+*, *::before, *::after {
+  z-index: auto;
+}
+
+/* Hero shouldn't force full viewport height — causes huge empty space on short screens */
+.cr-hero {
+  min-height: auto !important;
+}
+
+
+/* ==========================================================================
+   MOBILE DRAWER NAV STYLES
+   ========================================================================== */
+
+.nav-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: var(--p100);
+  border: 1px solid var(--line);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+  flex-shrink: 0;
+}
+
+.nav-toggle span {
+  width: 18px;
+  height: 2px;
+  background: var(--p700);
+  border-radius: 999px;
+}
+
+.nav-toggle:hover {
+  background: var(--p200);
+  transform: translateY(-1px);
+}
+
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 14, 35, .55);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .3s ease, visibility .3s ease;
+  z-index: 4998;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(86vw, 360px);
+  height: 100dvh;
+  background: #fff;
+  border-left: 1px solid var(--line);
+  box-shadow: -28px 0 80px rgba(20, 14, 35, .24);
+  z-index: 4999;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(105%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform .42s cubic-bezier(.4, 0, .2, 1), opacity .25s ease, visibility .25s ease;
+}
+
+nav.menu-open .nav-overlay {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+nav.menu-open .mobile-drawer {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.drawer-head {
+  height: 72px;
+  padding: 0 18px 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.drawer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.drawer-logo span { color: var(--p600); }
+
+.drawer-close {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: var(--p100);
+  border: 1px solid var(--line);
+  position: relative;
+  cursor: pointer;
+  transition: background .25s ease;
+}
+
+.drawer-close:hover { background: var(--p200); }
+
+.drawer-close span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 2px;
+  background: var(--p700);
+  border-radius: 999px;
+}
+
+.drawer-close span:first-child { transform: translate(-50%, -50%) rotate(45deg); }
+.drawer-close span:last-child  { transform: translate(-50%, -50%) rotate(-45deg); }
+
+.drawer-links {
+  flex: 1;
+  padding: 32px 18px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fff;
+}
+
+.drawer-links a {
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease;
+}
+
+.drawer-links a:hover,
+.drawer-links a.active {
+  background: var(--p100);
+  border-color: var(--p200);
+  color: var(--p700);
+  transform: translateX(3px);
+}
+
+.drawer-bottom {
+  padding: 18px 18px 24px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+
+.drawer-demo {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 14px;
+  background: var(--p700);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(93, 63, 184, .28);
+  transition: background .25s ease, transform .25s ease;
+}
+
+.drawer-demo:hover {
+  background: var(--p800);
+  transform: translateY(-1px);
+}
+
+
+/* ==========================================================================
+   ════════════════════ BREAKPOINT CASCADE ════════════════════
+   ========================================================================== */
+
+
+/* ─────────────────────────────────────────────
+   ULTRA WIDE — iMac 27", 4K (1800px+)
+   ───────────────────────────────────────────── */
+@media (min-width: 1800px) {
+  .nw, .fw { max-width: 1400px; }
+  .cr-hero-inner,
+  .cr-why-inner,
+  .cr-roles-inner,
+  .cr-vals-inner { max-width: 1320px; }
+  .cr-hero-img { max-width: 560px; }
+  .cr-hero-left h1 { font-size: clamp(42px, 5vw, 72px); }
+}
+
+
+/* ─────────────────────────────────────────────
+   LARGE DESKTOP — iMac 24" (1600px)
+   ───────────────────────────────────────────── */
+@media (max-width: 1600px) {
+  .nw, .fw { max-width: 1320px; }
+  .cr-hero-left h1 { font-size: clamp(36px, 4.5vw, 60px); }
+}
+
+
+/* ─────────────────────────────────────────────
+   STANDARD DESKTOP — MacBook Pro 16" (1440px)
+   ───────────────────────────────────────────── */
+@media (max-width: 1440px) {
+  .nw, .fw,
+  .cr-hero-inner,
+  .cr-why-inner,
+  .cr-roles-inner,
+  .cr-vals-inner,
+  .cr-form-inner {
+    padding-left: 44px;
+    padding-right: 44px;
+  }
+  .cr-hero-img { max-width: 480px; }
+  .cr-hero-left h1 { font-size: clamp(34px, 4.2vw, 56px); }
+}
+
+
+/* ─────────────────────────────────────────────
+   LAPTOP — MacBook Air, MacBook Pro 14" (1280px)
+   ───────────────────────────────────────────── */
+@media (max-width: 1280px) {
+  .nw, .fw,
+  .cr-hero-inner,
+  .cr-why-inner,
+  .cr-roles-inner,
+  .cr-vals-inner,
+  .cr-form-inner {
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+  .cr-hero-inner { gap: 40px; }
+  .cr-hero-img { max-width: 440px; }
+  .cr-hero-left h1 { font-size: clamp(32px, 4vw, 50px); }
+  .cr-hero-left p { font-size: 16px; }
+}
+
+
+/* ─────────────────────────────────────────────
+   SMALL LAPTOP — older MacBooks (1200px)
+   ───────────────────────────────────────────── */
+@media (max-width: 1200px) {
+  .nw, .fw,
+  .cr-hero-inner,
+  .cr-why-inner,
+  .cr-roles-inner,
+  .cr-vals-inner,
+  .cr-form-inner {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  .nw { gap: 12px; }
+  .nlinks a { padding: 7px 10px; font-size: 13.5px; }
+  .n-demo { padding: 9px 18px; font-size: 13.5px; }
+
+  .cr-hero { padding-top: 56px; }
+  .cr-hero-inner { gap: 36px; }
+  .cr-hero-img { max-width: 400px; }
+  .cr-hero-left h1 { font-size: clamp(32px, 4vw, 48px); }
+  .cr-hero-left p { font-size: 15.5px; max-width: 420px; }
+
+  .cr-why,
+  .cr-roles,
+  .cr-form-sec { padding: 80px 0 88px; }
+  .cr-vals { padding: 72px 0; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ⬇  HERO STACKS HERE  ⬇   (1024px and below — iPad landscape & smaller)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* ─────────────────────────────────────────────
+   TABLET LANDSCAPE / iPAD MINI LANDSCAPE (1024px)
+   ───────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .nw, .fw,
+  .cr-hero-inner,
+  .cr-why-inner,
+  .cr-roles-inner,
+  .cr-vals-inner,
+  .cr-form-inner {
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+  }
+
+  /* HERO — STACK with image first, centered text */
+  .cr-hero {
+    padding: 56px 0 64px !important;
+    text-align: center;
+  }
+
+  .cr-hero-inner {
+    grid-template-columns: 1fr !important;
+    gap: 36px !important;
+    max-width: 720px !important;
+    padding-bottom: 0 !important;
+  }
+
+  .cr-hero-right { order: -1 !important; }
+  .cr-hero-left  { order: 1; }
+
+  .cr-hero-img { max-width: 340px !important; }
+
+  .cr-hero-left h1 {
+    font-size: clamp(30px, 5vw, 46px) !important;
+    line-height: 1.04;
+  }
+
+  .cr-hero-left p {
+    font-size: 16px;
+    max-width: 540px;
+    margin: 0 auto 30px !important;
+  }
+
+  .cr-ey,
+  .cr-hero-btns,
+  .cr-perks {
+    justify-content: center !important;
+  }
+
+  /* Why grid 3→2 */
+  .cr-why-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Values 4→2 */
+  .cr-vals-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Form fields 2→1 */
+  .cr-frow { grid-template-columns: 1fr !important; }
+
+  .cr-form-wrap { padding: 44px 36px; }
+}
+
+
+/* ─────────────────────────────────────────────
+   HAMBURGER DRAWER KICKS IN (900px)
+   ───────────────────────────────────────────── */
+@media (max-width: 900px) {
+  nav { z-index: 5000; }
+
+  .nw {
+    height: 64px !important;
+    padding: 0 20px !important;
+  }
+
+  .logo { font-size: 18px; }
+  .lbox { width: 34px; height: 34px; }
+
+  .nw > .nlinks,
+  .nw > .nright {
+    display: none !important;
+  }
+
+  .nav-toggle {
+    display: flex !important;
+    margin-left: auto;
+  }
+
+  body.nav-lock { overflow: hidden; }
+}
+
+
+/* ─────────────────────────────────────────────
+   TABLET PORTRAIT / iPAD MINI/AIR/PRO 11" (880px)
+   ───────────────────────────────────────────── */
+@media (max-width: 880px) {
+  .nw { padding: 0 24px !important; }
+  .fw,
+  .cr-hero-inner,
+  .cr-why-inner,
+  .cr-roles-inner,
+  .cr-vals-inner,
+  .cr-form-inner {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  .cr-hero { padding: 48px 0 56px !important; }
+  .cr-hero-inner { gap: 28px !important; }
+  .cr-hero-img { max-width: 280px !important; }
+
+  .cr-hero-left h1 {
+    font-size: clamp(28px, 6vw, 42px) !important;
+    margin-bottom: 18px !important;
+  }
+
+  .cr-hero-left p {
+    font-size: 15.5px;
+    margin-bottom: 26px !important;
+  }
+
+  .cr-why,
+  .cr-roles,
+  .cr-form-sec { padding: 64px 0 72px !important; }
+  .cr-vals { padding: 60px 0 !important; }
+
+  .cr-sec-hd { margin-bottom: 40px !important; }
+  .cr-sec-hd h2 { font-size: clamp(26px, 5vw, 38px) !important; }
+
+  .cr-role-row { padding: 18px 22px; gap: 16px; }
+  .cr-form-wrap { padding: 36px 28px; }
+}
+
+
+/* ─────────────────────────────────────────────
+   LARGE MOBILE / iPHONE PRO MAX (768px)
+   ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nw { padding: 0 20px !important; }
+  .fw,
+  .cr-hero-inner,
+  .cr-why-inner,
+  .cr-roles-inner,
+  .cr-vals-inner,
+  .cr-form-inner {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .cr-hero { padding: 40px 0 48px !important; }
+  .cr-hero-inner { gap: 26px !important; }
+  .cr-hero-img { max-width: 240px !important; }
+
+  .cr-hero-left h1 {
+    font-size: clamp(26px, 7vw, 36px) !important;
+    line-height: 1.1;
+    margin-bottom: 16px !important;
+  }
+
+  .cr-hero-left p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    margin-bottom: 24px !important;
+  }
+
+  .cr-ey { font-size: 10.5px; margin-bottom: 16px; }
+
+  .cr-hero-btns { gap: 10px; }
+  .cr-btn-pri { padding: 13px 24px; font-size: 14px; }
+  .cr-btn-sec { padding: 12px 20px; font-size: 14px; }
+
+  .cr-perks { gap: 8px; margin-top: 20px; }
+  .cr-perk { padding: 6px 12px; font-size: 12px; }
+
+  /* Why → 1 col */
+  .cr-why-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+  .cr-why-card { padding: 26px 22px; }
+
+  /* Roles — keep readable */
+  .cr-role-row { padding: 16px 20px; gap: 14px; }
+  .cr-role-left { gap: 14px; flex: 1; min-width: 0; }
+  .cr-role-title { font-size: 14.5px; }
+  .cr-role-meta { gap: 8px; }
+
+  /* Values still 2-col */
+  .cr-val { padding: 26px 20px; }
+
+  /* Form */
+  .cr-form-wrap {
+    padding: 32px 22px !important;
+    border-radius: 22px;
+  }
+  .cr-form-hd { margin-bottom: 28px; }
+  .cr-form-hd h2 { font-size: clamp(22px, 6vw, 30px); }
+
+  /* Footer */
+  .fgrid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────
+   STANDARD MOBILE / iPHONE (640px)
+   ───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .nw { padding: 0 16px !important; }
+  .fw,
+  .cr-hero-inner,
+  .cr-why-inner,
+  .cr-roles-inner,
+  .cr-vals-inner,
+  .cr-form-inner {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .cr-hero { padding: 36px 0 44px !important; }
+  .cr-hero-img { max-width: 200px !important; }
+
+  .cr-hero-left h1 {
+    font-size: clamp(24px, 8vw, 32px) !important;
+    line-height: 1.12;
+  }
+
+  .cr-hero-left p {
+    font-size: 14px;
+    margin-bottom: 22px !important;
+  }
+
+  /* STACK buttons vertically on phones */
+  .cr-hero-btns {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto !important;
+  }
+
+  .cr-btn-pri,
+  .cr-btn-sec {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cr-perks {
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .cr-why,
+  .cr-roles,
+  .cr-form-sec { padding: 56px 0 64px !important; }
+  .cr-vals { padding: 56px 0 !important; }
+
+  .cr-sec-hd { margin-bottom: 36px !important; }
+
+  .cr-why-card { padding: 24px 20px; border-radius: 18px; }
+  .cr-wico { width: 46px; height: 46px; }
+  .cr-why-card h3 { font-size: 17px; }
+  .cr-why-card p { font-size: 13.5px; }
+
+  /* Roles compact */
+  .cr-role-row { padding: 14px 18px; gap: 12px; }
+  .cr-role-ico { width: 40px; height: 40px; border-radius: 11px; }
+  .cr-role-title { font-size: 13.5px; }
+  .cr-role-meta { gap: 6px; margin-top: 5px; }
+  .cr-role-tag { font-size: 10.5px; padding: 2px 8px; }
+  .cr-role-arrow { width: 30px; height: 30px; }
+
+  /* Values 2→1 */
+  .cr-vals-grid {
+    grid-template-columns: 1fr !important;
+    border-radius: 16px;
+  }
+  .cr-val { padding: 24px 20px; }
+  .cr-val-ico { width: 44px; height: 44px; }
+  .cr-val h4 { font-size: 15px; }
+  .cr-val p { font-size: 12.5px; }
+
+  /* Form */
+  .cr-form-wrap {
+    padding: 28px 20px !important;
+    border-radius: 20px;
+  }
+  .cr-fi { padding: 11px 14px; font-size: 14px; }
+  .cr-submit { padding: 14px; font-size: 14.5px; }
+  .cr-file-box { padding: 12px 14px; gap: 12px; }
+  .cr-file-ico { width: 36px; height: 36px; }
+  .cr-checks { gap: 10px; }
+  .cr-check span { font-size: 13.5px; }
+
+  .fgrid {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────
+   SMALL MOBILE / iPHONE SE-13 mini (480px)
+   ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .nw { height: 60px !important; padding: 0 14px !important; }
+  .fw,
+  .cr-hero-inner,
+  .cr-why-inner,
+  .cr-roles-inner,
+  .cr-vals-inner,
+  .cr-form-inner {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .cr-hero { padding: 32px 0 40px !important; }
+  .cr-hero-img { max-width: 170px !important; }
+
+  .cr-hero-left h1 {
+    font-size: 26px !important;
+    line-height: 1.14;
+    margin-bottom: 14px !important;
+  }
+
+  .cr-hero-left p {
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+
+  .cr-perk { padding: 5px 10px; font-size: 11.5px; }
+  .cr-perk svg { width: 12px; height: 12px; }
+
+  .cr-why-card { padding: 22px 18px; }
+  .cr-why-card h3 { font-size: 16.5px; }
+
+  .cr-role-row { padding: 14px 16px; gap: 10px; }
+  .cr-role-left { gap: 12px; }
+  .cr-role-ico { width: 38px; height: 38px; border-radius: 10px; }
+  .cr-role-title { font-size: 13px; }
+
+  .cr-val { padding: 22px 16px; }
+
+  .cr-form-wrap {
+    padding: 24px 16px !important;
+    border-radius: 18px;
+  }
+  .cr-form-hd h2 { font-size: 22px; }
+}
+
+
+/* ─────────────────────────────────────────────
+   SMALL PHONE DRAWER ADJUSTMENT (420px)
+   ───────────────────────────────────────────── */
+@media (max-width: 420px) {
+  .nw { padding: 0 16px !important; }
+  .logo { font-size: 17px; gap: 8px; }
+  .lbox { width: 32px; height: 32px; }
+
+  .nav-toggle,
+  .drawer-close { width: 40px; height: 40px; }
+
+  .mobile-drawer { width: 88vw; }
+  .drawer-head { height: 64px; padding-left: 18px; }
+  .drawer-links { padding-top: 26px; }
+  .drawer-links a { padding: 13px 16px; font-size: 13.5px; }
+}
+
+
+/* ─────────────────────────────────────────────
+   EXTRA SMALL / iPHONE SE 1st gen (380px)
+   ───────────────────────────────────────────── */
+@media (max-width: 380px) {
+  .fw,
+  .cr-hero-inner,
+  .cr-why-inner,
+  .cr-roles-inner,
+  .cr-vals-inner,
+  .cr-form-inner {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .cr-hero-left h1 { font-size: 22px !important; }
+  .cr-hero-left p { font-size: 13px; }
+  .cr-hero-img { max-width: 150px !important; }
+
+  .cr-why-card,
+  .cr-val { padding: 20px 16px; }
+
+  .cr-form-wrap { padding: 22px 14px !important; }
+
+  .cr-role-row { padding: 12px 14px; }
+  .cr-role-title { font-size: 12.5px; }
+
+  .cr-submit { padding: 13px; font-size: 13.5px; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   IPAD-SPECIFIC OVERRIDES — explicit ranges
+   ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* ─────────────────────────────────────────────
+   IPAD MINI PORTRAIT (768 × 1024)
+   IPAD AIR PORTRAIT (820 × 1180)
+   IPAD PRO 11" PORTRAIT (834 × 1194)
+   ───────────────────────────────────────────── */
+@media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
+  .cr-hero {
+    padding: 64px 0 72px !important;
+  }
+
+  .cr-hero-inner {
+    max-width: 640px !important;
+    gap: 36px !important;
+  }
+
+  .cr-hero-img { max-width: 340px !important; }
+
+  .cr-hero-left h1 {
+    font-size: clamp(32px, 5.5vw, 44px) !important;
+  }
+
+  .cr-hero-left p {
+    font-size: 16px !important;
+    max-width: 540px;
+  }
+
+  /* Why 1-col for breathing room */
+  .cr-why-grid {
+    grid-template-columns: 1fr !important;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* Values 2-col stays */
+  .cr-vals-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .cr-form-wrap {
+    padding: 40px 32px !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────
+   IPAD PRO 12.9" PORTRAIT (1024 × 1366)
+   ───────────────────────────────────────────── */
+@media (min-width: 1000px) and (max-width: 1100px) and (orientation: portrait) {
+  .cr-hero {
+    padding: 64px 0 72px !important;
+  }
+
+  .cr-hero-inner {
+    grid-template-columns: 1fr !important;
+    max-width: 700px !important;
+    gap: 44px !important;
+    text-align: center;
+  }
+
+  .cr-hero-right { order: -1 !important; }
+  .cr-hero-img { max-width: 420px !important; }
+
+  .cr-hero-left p {
+    margin: 0 auto 30px !important;
+  }
+
+  .cr-ey,
+  .cr-hero-btns,
+  .cr-perks { justify-content: center !important; }
+
+  .cr-why-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .cr-vals-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────
+   IPAD AIR LANDSCAPE (1180 × 820)
+   IPAD PRO 11" LANDSCAPE (1194 × 834)
+   — keep desktop 2-col hero
+   ───────────────────────────────────────────── */
+@media (min-width: 1100px) and (max-width: 1280px) and (orientation: landscape) {
+  .cr-hero {
+    padding: 56px 0 64px !important;
+  }
+
+  .cr-hero-inner {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 40px !important;
+    text-align: left !important;
+  }
+
+  .cr-hero-right { order: 0 !important; }
+  .cr-hero-img { max-width: 440px !important; }
+
+  .cr-hero-left p { margin: 0 0 30px !important; }
+  .cr-ey,
+  .cr-hero-btns,
+  .cr-perks { justify-content: flex-start !important; }
+
+  .cr-why-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .cr-vals-grid { grid-template-columns: repeat(4, 1fr) !important; }
+}
+
+
+/* ─────────────────────────────────────────────
+   IPAD PRO 12.9" LANDSCAPE (1366 × 1024)
+   — full desktop layout
+   ───────────────────────────────────────────── */
+@media (min-width: 1300px) and (max-width: 1400px) and (orientation: landscape) {
+  .cr-hero-inner {
+    grid-template-columns: 1fr 1fr !important;
+    text-align: left !important;
+  }
+  .cr-hero-right { order: 0 !important; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY & DEVICE QUERIES
+   ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* Touch devices — stop hover rotations & image float */
+@media (hover: none) and (pointer: coarse) {
+  .cr-why-card:hover,
+  .cr-role-row:hover,
+  .cr-val:hover {
+    transform: none !important;
+  }
+
+  .cr-hero-img {
+    animation: none !important;
+  }
+
+  .n-demo,
+  .nav-toggle,
+  .drawer-close,
+  .drawer-demo,
+  .cr-btn-pri,
+  .cr-btn-sec,
+  .cr-submit {
+    min-height: 44px;
+  }
+}
+
+
+/* Retina sharpness */
+@media (-webkit-min-device-pixel-ratio: 2),
+       (min-resolution: 192dpi) {
+  .cr-why-card,
+  .cr-role-row,
+  .cr-form-wrap {
+    border-width: 1px;
+  }
+}
+
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .cr-hero-img { animation: none !important; }
+}
+
+/* ================================================= */
+/* GLOBAL FOOTER RESPONSIVE MEDIA QUERIES */
+/* Use this same footer CSS on every page */
+/* ================================================= */
+
+
+/* ---------- Large tablets / small laptops ---------- */
+@media (max-width: 1024px) {
+  footer {
+    padding: 76px 0 34px;
+  }
+
+  footer .fw {
+    width: min(100% - 48px, 1120px);
+    margin: 0 auto;
+  }
+
+  footer .f-top {
+    gap: 12px;
+    margin-bottom: 42px;
+  }
+
+  footer .f-brand-name {
+    font-size: clamp(30px, 4vw, 46px);
+  }
+
+  footer .f-tagline {
+    max-width: 620px;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  footer .fgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 38px 56px;
+  }
+
+  footer .fcol h4 {
+    margin-bottom: 18px;
+  }
+
+  footer .fbot {
+    margin-top: 44px;
+    padding-top: 24px;
+  }
+}
+
+
+/* ---------- iPad / tablet portrait ---------- */
+@media (max-width: 768px) {
+  footer {
+    padding: 68px 0 30px;
+  }
+
+  footer .fw {
+    width: min(100% - 36px, 720px);
+  }
+
+  footer .f-top {
+    margin-bottom: 38px;
+  }
+
+  footer .f-brand-name {
+    font-size: 34px;
+    line-height: 1.05;
+  }
+
+  footer .f-tagline {
+    font-size: 14.5px;
+    line-height: 1.75;
+    max-width: 100%;
+  }
+
+  footer .fgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 34px 42px;
+  }
+
+  footer .fcol h4 {
+    font-size: 12px;
+    letter-spacing: .18em;
+    margin-bottom: 16px;
+  }
+
+  footer .fcol ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  footer .fcol a {
+    font-size: 14.5px;
+    line-height: 1.45;
+  }
+
+  footer .fcol a svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  footer .fbot {
+    margin-top: 38px;
+    padding-top: 22px;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+}
+
+
+/* ---------- Phones like iPhone SE / 375px ---------- */
+@media (max-width: 480px) {
+  footer {
+    padding: 60px 0 26px;
+  }
+
+  footer .fw {
+    width: calc(100% - 32px);
+  }
+
+  footer .f-top {
+    margin-bottom: 34px;
+  }
+
+  footer .f-brand-name {
+    font-size: 30px;
+    letter-spacing: .02em;
+  }
+
+  footer .f-tagline {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /*
+    Important:
+    Keep 2 columns on normal phones.
+    This matches the PROV/O screenshot style.
+  */
+  footer .fgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 26px;
+  }
+
+  footer .fcol h4 {
+    font-size: 11.5px;
+    letter-spacing: .20em;
+    margin-bottom: 15px;
+  }
+
+  footer .fcol ul {
+    gap: 11px;
+  }
+
+  footer .fcol a {
+    font-size: 14px;
+    line-height: 1.45;
+    word-break: normal;
+  }
+
+  footer .fcol a svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  footer .fbot {
+    margin-top: 34px;
+    padding-top: 20px;
+    font-size: 12.8px;
+    text-align: left;
+  }
+}
+
+
+/* ---------- Very small phones below 340px ---------- */
+@media (max-width: 340px) {
+  footer .fw {
+    width: calc(100% - 24px);
+  }
+
+  footer .fgrid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  footer .fbrand-name,
+  footer .f-brand-name {
+    font-size: 28px;
+  }
+
+  footer .fcol a {
+    font-size: 13.5px;
+  }
+}
