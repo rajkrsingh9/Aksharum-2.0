@@ -217,3 +217,49 @@ document.querySelectorAll('.n-demo').forEach(btn=>{
     gsap.to(btn,{x:0,y:0,duration:.55,ease:'elastic.out(1,.5)'})
   );
 });
+
+
+/* ================================================= */
+/* LIGHT / DARK MODE TOGGLE */
+/* ================================================= */
+
+(function () {
+  const root = document.documentElement;
+
+  function getCurrentTheme() {
+    return root.getAttribute("data-theme") || "light";
+  }
+
+  function applyTheme(theme) {
+    root.setAttribute("data-theme", theme);
+    localStorage.setItem("aksharum-theme", theme);
+
+    const isDark = theme === "dark";
+    const label = isDark ? "Switch to light mode" : "Switch to dark mode";
+
+    document.querySelectorAll("#themeToggle, #drawerThemeToggle").forEach((btn) => {
+      btn.setAttribute("aria-label", label);
+    });
+
+    const drawerText = document.querySelector(".drawer-theme-text");
+    if (drawerText) {
+      drawerText.textContent = isDark ? "Light Mode" : "Dark Mode";
+    }
+  }
+
+  function toggleTheme() {
+    const currentTheme = getCurrentTheme();
+    const nextTheme = currentTheme === "dark" ? "light" : "dark";
+    applyTheme(nextTheme);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    applyTheme(getCurrentTheme());
+
+    const desktopToggle = document.getElementById("themeToggle");
+    const drawerToggle = document.getElementById("drawerThemeToggle");
+
+    desktopToggle?.addEventListener("click", toggleTheme);
+    drawerToggle?.addEventListener("click", toggleTheme);
+  });
+})();
