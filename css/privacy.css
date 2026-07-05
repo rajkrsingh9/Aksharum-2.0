@@ -1016,7 +1016,7 @@ body.menu-open {
   visibility: hidden;
   pointer-events: none;
   transition: opacity .32s ease, visibility .32s ease;
-  z-index: 4998;
+  z-index: 6000;
 }
 
 /* drawer */
@@ -1031,7 +1031,7 @@ body.menu-open {
   -webkit-backdrop-filter: blur(22px);
   border-left: 1px solid rgba(229, 220, 255, .95);
   box-shadow: -28px 0 80px rgba(20, 14, 35, .24);
-  z-index: 4999;
+  z-index: 6001;
 
   display: flex;
   flex-direction: column;
@@ -1048,13 +1048,13 @@ body.menu-open {
 }
 
 /* open state */
-nav.menu-open .nav-overlay {
+body.nav-lock .nav-overlay {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
 
-nav.menu-open .mobile-drawer {
+body.nav-lock .mobile-drawer {
   transform: translateX(0);
   opacity: 1;
   visibility: visible;
@@ -2225,3 +2225,8 @@ footer .fw {
     padding-right: 16px !important;
   }
 }
+
+/* ── GLOBAL X-OVERFLOW GUARD ──
+   Prevents stray horizontal pan on mobile. 'clip' (unlike 'hidden')
+   creates no scroll container, so position:sticky nav keeps working. */
+html,body{overflow-x:clip}

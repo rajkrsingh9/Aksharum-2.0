@@ -1,3 +1,25 @@
+/* ── GSAP CDN fallback ──
+   If the GSAP CDN fails to load (offline / blocked / flaky mobile network),
+   stub the animation API so the rest of this file — nav drawer, theme
+   toggle — still runs. Content simply appears without animations. */
+if (!window.gsap) {
+  (function () {
+    var chain = {};
+    ['to', 'from', 'fromTo', 'set', 'play', 'pause', 'kill'].forEach(function (m) {
+      chain[m] = function () { return chain; };
+    });
+    window.gsap = {
+      registerPlugin: function () {},
+      timeline: function () { return chain; },
+      to: function () { return chain; },
+      from: function () { return chain; },
+      fromTo: function () { return chain; },
+      set: function () { return chain; }
+    };
+    window.ScrollTrigger = { create: function () {}, refresh: function () {} };
+  })();
+}
+
 gsap.registerPlugin(ScrollTrigger);
 
 /* NAV */

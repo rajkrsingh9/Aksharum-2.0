@@ -381,18 +381,16 @@ footer{background:var(--p900);padding:48px 0 0;margin-top:auto}
 .sd1{transition-delay:.1s}.sd2{transition-delay:.2s}.sd3{transition-delay:.3s}.sd4{transition-delay:.4s}
 
 /* ═══════════════════════════════ MOBILE DRAWER ═══════════════════════════════ */
-nav,nav *,nav *::before,nav *::after{z-index:auto !important}
-.nav-overlay{z-index:4998 !important}
-.mobile-drawer{z-index:4999 !important}
-nav.menu-open{z-index:5000 !important}
+.nav-overlay{z-index: 6000 !important}
+.mobile-drawer{z-index: 6001 !important}
 
 .nav-toggle{display:none;width:42px;height:42px;border-radius:999px;background:var(--p100);border:1px solid var(--line);align-items:center;justify-content:center;flex-direction:column;gap:5px;cursor:pointer;transition:background .25s ease,transform .25s ease;flex-shrink:0}
 .nav-toggle span{width:18px;height:2px;background:var(--p700);border-radius:999px}
 .nav-toggle:hover{background:var(--p200);transform:translateY(-1px)}
 .nav-overlay{position:fixed;inset:0;background:rgba(20,14,35,.55);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s ease,visibility .3s ease}
 .mobile-drawer{position:fixed;top:0;right:0;width:min(86vw,360px);height:100dvh;background:#fff;border-left:1px solid var(--line);box-shadow:-28px 0 80px rgba(20,14,35,.24);display:flex;flex-direction:column;transform:translateX(105%);opacity:0;visibility:hidden;pointer-events:none;transition:transform .42s cubic-bezier(.4,0,.2,1),opacity .25s ease,visibility .25s ease}
-nav.menu-open .nav-overlay{opacity:1;visibility:visible;pointer-events:auto}
-nav.menu-open .mobile-drawer{transform:translateX(0);opacity:1;visibility:visible;pointer-events:auto}
+body.nav-lock .nav-overlay{opacity:1;visibility:visible;pointer-events:auto}
+body.nav-lock .mobile-drawer{transform:translateX(0);opacity:1;visibility:visible;pointer-events:auto}
 .drawer-head{height:72px;padding:0 18px 0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);flex-shrink:0}
 .drawer-logo{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:19px;font-weight:800;color:var(--ink)}
 .drawer-logo span{color:var(--p600)}
@@ -935,7 +933,6 @@ footer .fw {
 
 @media (max-width: 900px) {
   /* Every section contained, no overflow past viewport */
-  nav,
   .hero,
   .prob-sec,
   .sol-sec,
@@ -975,3 +972,8 @@ footer .fw {
     margin-right: 0 !important;
   }
 }
+
+/* ── GLOBAL X-OVERFLOW GUARD ──
+   Prevents stray horizontal pan on mobile. 'clip' (unlike 'hidden')
+   creates no scroll container, so position:sticky nav keeps working. */
+html,body{overflow-x:clip}

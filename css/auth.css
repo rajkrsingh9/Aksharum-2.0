@@ -228,3 +228,8 @@ a:hover{text-decoration:underline}
   80%{transform:translateX(5px)}
 }
 .shake{animation:shake .35s ease-in-out}
+
+/* ── GLOBAL X-OVERFLOW GUARD ──
+   Prevents stray horizontal pan (decor orbs extend past the right edge).
+   'clip' creates no scroll container, so layout is unaffected. */
+html,body{overflow-x:clip}
