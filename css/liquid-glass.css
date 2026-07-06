@@ -101,11 +101,40 @@ html[data-theme="dark"] .drawer-theme-toggle{
   border-left: 1px solid var(--lg-border);
 }
 .drawer-head{background: transparent; border-bottom-color: var(--lg-edge)}
-.drawer-links a{
-  background: var(--lg-bg-soft);
-  border: 1px solid var(--lg-border);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
+/* Normalized glass pills — every page ships its own drawer CSS with
+   different radii/colors, so pin the look here with .mobile-drawer
+   specificity and lavender (not white) borders that stay visible no
+   matter what shows through the glass behind the drawer. */
+.mobile-drawer .drawer-links a{
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,.5);
+  border: 1px solid rgba(93,63,184,.16);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
 }
+.mobile-drawer .drawer-links a:hover,
+.mobile-drawer .drawer-links a.active{
+  background: rgba(124,95,214,.12);
+  border-color: rgba(93,63,184,.30);
+  color: var(--p700);
+}
+.mobile-drawer .drawer-theme-toggle{
+  min-height: 48px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,.5);
+  border: 1px solid rgba(93,63,184,.16);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+  margin-bottom: 12px;
+}
+.mobile-drawer .drawer-demo{border-radius: 14px}
 html[data-theme="dark"] .mobile-drawer{
   background: rgba(15,10,28,.68);
   border-left-color: rgba(222,210,255,.16);
@@ -113,9 +142,22 @@ html[data-theme="dark"] .mobile-drawer{
 html[data-theme="dark"] .drawer-head,
 html[data-theme="dark"] .drawer-links,
 html[data-theme="dark"] .drawer-bottom{background: transparent}
-html[data-theme="dark"] .drawer-links a{
+html[data-theme="dark"] .mobile-drawer .drawer-links a{
   background: rgba(255,255,255,.06);
-  border-color: rgba(222,210,255,.14);
+  border-color: rgba(222,210,255,.18);
+  color: var(--ink, #fbf8ff);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+html[data-theme="dark"] .mobile-drawer .drawer-links a:hover,
+html[data-theme="dark"] .mobile-drawer .drawer-links a.active{
+  background: rgba(199,179,255,.14);
+  border-color: rgba(199,179,255,.32);
+  color: var(--p700, #c7b3ff);
+}
+html[data-theme="dark"] .mobile-drawer .drawer-theme-toggle{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(222,210,255,.18);
+  color: var(--ink, #fbf8ff);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
 }
 .nav-overlay{
@@ -383,9 +425,13 @@ html[data-theme="dark"] .page .magic-ring{
    fades in on arrival. Nav is sticky & identical across pages, so it reads
    as a persistent bar while content crossfades beneath it. */
 @media (prefers-reduced-motion: no-preference){
+  /* opacity ONLY — a transform keyframe with fill on <body> would leave a
+     permanently-active transform animation, which turns body into the
+     containing block for every position:fixed element (mobile drawer,
+     overlay) and breaks them the moment the page is scrolled */
   @keyframes lgPageIn{
-    from{opacity:0; transform:translateY(6px)}
-    to{opacity:1; transform:none}
+    from{opacity:0}
+    to{opacity:1}
   }
   @keyframes lgPillIn{
     from{opacity:.2; transform:scale(.82)}
@@ -399,3 +445,15 @@ html[data-theme="dark"] .page .magic-ring{
 }
 /* navbar surface changes (scroll state, theme) fade smoothly */
 nav{transition:background-color .35s ease,border-color .3s ease,box-shadow .3s ease}
+
+/* ── Sticky-nav scroll stability on mobile ─────────────────────────────── */
+/* Own compositor layer so the bar doesn't lag/jitter behind the scroll;
+   nav has no fixed-position descendants, so the transform is safe. */
+nav{transform:translateZ(0)}
+/* Heavy blur is what makes the bar repaint slowly on phones — soften it. */
+@media (max-width:900px){
+  nav{
+    -webkit-backdrop-filter:blur(12px) saturate(150%);
+    backdrop-filter:blur(12px) saturate(150%);
+  }
+}
