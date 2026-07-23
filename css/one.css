@@ -55,6 +55,23 @@ nav.scrolled{border-color:var(--line);box-shadow:0 2px 20px rgba(93,63,184,.08)}
     "wdth" 100;
 }
 
+
+/* By default (or when light theme is active), hide the dark logo */
+.logo-dark {
+  display: none !important;
+}
+
+/* When data-theme is set to dark, hide the light logo and show the dark logo */
+[data-theme="dark"] .logo-light {
+  display: none !important;
+}
+
+[data-theme="dark"] .logo-dark {
+  display: inline-block !important; /* or 'block', depending on your layout */
+}
+
+
+
 .nlinks{display:flex;gap:2px;list-style:none}
 .nlinks a{display:block;padding:7px 15px;font-size:16.5px;font-weight:500;color:var(--ink2);border-radius:var(--rpill);transition:color .2s,background .2s;text-decoration:none}
 .nlinks a:hover{color:var(--ink);background:var(--p50)}
