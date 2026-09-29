@@ -1,17 +1,14 @@
-:root{
-  --p100:#f1ecff;--p200:#e5dcff;--p300:#d0c0fa;
-  --p500:#9d83e6;--p600:#7c5fd6;--p700:#5d3fb8;--p800:#3f2885;
-  --ink:#1a1230;--ink2:#4a4063;--ink3:#9590a8;
-  --line:#e8e3f7;--bg:#f5f3fb;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);-webkit-font-smoothing:antialiased}
-button,input{font-family:'DM Sans',sans-serif}
-a{color:var(--p700);text-decoration:none}
+/* Design tokens: variables.css. Resets/typography: base.css.
+   Buttons/cards/forms: components.css. This file = auth page layout only. */
+html,body{height:100%}
+a{color:var(--p700)}
 a:hover{text-decoration:underline}
 
-/* PAGE */
+/* PAGE — softer, muted tone than the rest of the site (deliberate for the
+   centered auth card), scoped locally rather than pushed into global tokens */
 .page{
+  --ink3:#9590a8;--line:#e8e3f7;
+  background:#f5f3fb;
   min-height:100vh;
   display:flex;
   flex-direction:column;

@@ -1,0 +1,84 @@
+/* ════════════════════════════════════════════════════════════════════════
+   AKSHARUM — BASE / GLOBAL LAYER
+   Resets, typography, the vibrant "aurora" background environment glass
+   surfaces refract against, and cross-page utilities (scroll-reveal, page
+   transitions). Loaded AFTER variables.css, BEFORE components.css.
+   ════════════════════════════════════════════════════════════════════════ */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--ink2);
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* ── Aurora background environment ──────────────────────────────────────
+   A fixed, full-viewport gradient mesh behind every page. Opaque section
+   backgrounds (hero, white panels, footer) sit on top of it as usual; it
+   shows through anywhere a section is transparent and behind every glass
+   surface (nav, drawer, floating cards), giving backdrop-filter something
+   colorful to refract instead of flat white. */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  z-index:-1;
+  background:var(--aurora);
+  background-attachment:fixed;
+  animation:auroraDrift 28s ease-in-out infinite alternate;
+}
+@keyframes auroraDrift{
+  0%{background-position:0% 0%}
+  100%{background-position:2% 3%}
+}
+@media (prefers-reduced-motion:reduce){
+  body::before{animation:none}
+}
+
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--ink);letter-spacing:-.02em;line-height:1.05}
+p{line-height:1.65}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+img{max-width:100%;display:block}
+input,select,textarea{font-family:var(--font-body);color:inherit}
+
+/* Visible, consistent keyboard focus ring everywhere (WCAG) */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
+textarea:focus-visible,[tabindex]:focus-visible{
+  outline:2.5px solid var(--p500);
+  outline-offset:2px;
+  border-radius:var(--r);
+}
+
+/* ── Scroll-reveal utility (shared by every page's IntersectionObserver) ── */
+.sr{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.sr.v{opacity:1;transform:none}
+.sd1{transition-delay:.1s}.sd2{transition-delay:.2s}.sd3{transition-delay:.3s}.sd4{transition-delay:.4s}
+
+/* ── Cross-page fade transition (driven by js/page-transitions.js) ─────── */
+@media (prefers-reduced-motion:no-preference){
+  @keyframes pageIn{from{opacity:0}to{opacity:1}}
+  body{animation:pageIn .34s ease both}
+  body.page-leave{animation:none;opacity:0;transition:opacity .16s ease}
+}
+
+/* ── Global text-selection + scrollbar polish ───────────────────────────── */
+::selection{background:var(--p300);color:var(--p900)}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--p50)}
+::-webkit-scrollbar-thumb{background:var(--p300);border-radius:var(--rpill);border:3px solid var(--p50)}
+::-webkit-scrollbar-thumb:hover{background:var(--p500)}
+
+@media print{
+  body::before{display:none}
+  a{color:#000!important;text-decoration:underline}
+}
+@media (forced-colors:active){
+  body::before{display:none}
+}
