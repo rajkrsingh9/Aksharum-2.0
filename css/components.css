@@ -1,0 +1,347 @@
+/* ════════════════════════════════════════════════════════════════════════
+   AKSHARUM — SHARED COMPONENTS
+   The ONE implementation of every piece of chrome repeated on all 13 pages:
+   navbar, mobile drawer, footer, buttons, and the Glass/Clay treatment for
+   every card-like surface site-wide. Loaded AFTER variables.css + base.css,
+   BEFORE any page-specific stylesheet (which should only contain layout
+   unique to that page — see pages' own CSS files for overrides).
+
+   Design language:
+   • GLASSMORPHISM — nav, mobile drawer, and any surface that floats on top
+     of a colored/gradient section (dashboard widgets, chips, solution &
+     trust cards) get frosted blur + translucent fill + gradient hairline.
+   • CLAYMORPHISM  — buttons, nav pills, pricing/feature/testimonial cards
+     and anything sitting on a plain white/light canvas get the inflated
+     ceramic three-shadow recipe (outer drop shadow + two inset shadows).
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════ NAVBAR ═══════════════════════════════
+   `nav` is a transparent sticky wrapper (just provides the inset gutter);
+   `.nw` is the actual floating dark-glass pill — a permanent "dark chrome"
+   bar that reads the same in light or dark site theme. */
+nav{
+  position:absolute;
+  top:0;z-index:200;
+  padding:20px var(--nav-gutter) 0;
+  pointer-events:none;
+  width: 100vw;
+}
+.nw{
+  pointer-events:auto;
+  max-width:calc(var(--page-max) + 100px);margin:0 auto;padding:0 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:76px;gap:16px;
+  background:var(--nav-pill-bg);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat));
+  backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat));
+  border:1px solid var(--nav-pill-border);
+  border-radius:var(--rpill);
+  box-shadow:var(--nav-pill-shadow);
+  transition:background-color .35s ease,box-shadow .3s ease;
+}
+nav.scrolled .nw{
+  background:var(--nav-pill-bg-scrolled);
+  box-shadow:var(--nav-pill-shadow-scrolled);
+}
+
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:1.5vw;letter-spacing:-.02em;color:#fff}
+.lbox{width:36px;height:36px;border-radius:10px;background:var(--p700);display:grid;place-items:center;box-shadow:0 3px 10px rgba(93,63,184,.28);flex-shrink:0}
+.lbox svg{width:19px;height:19px;color:#fff}
+.logo-accent{color:var(--p400);font-family:var(--font-accent);font-optical-sizing:auto;font-weight:400;font-style:normal;font-variation-settings:"wdth" 100}
+
+.logo-light{display:none!important}
+.logo-dark{display:inline-block!important}
+
+/* nav links — light text on the dark pill; active = solid clay-black pill */
+.nlinks{display:flex;gap:2px;list-style:none}
+.nlinks a{display:block;padding:9px 17px;font-size:15.5px;font-weight:500;color:var(--nav-text);border-radius:var(--rpill);transition:color .2s,background .2s,box-shadow .25s,transform .2s}
+.nlinks a:hover{color:var(--nav-text-hover);background:rgba(255,255,255,.08)}
+.nlinks a.active{color:#fff;background:var(--nav-active-bg);font-weight:600;box-shadow:var(--nav-active-shadow)}
+
+.nright{display:flex;align-items:center;gap:10px}
+.n-login{padding:8px 18px;font-size:14px;font-weight:500;color:var(--nav-text);border-radius:var(--rpill);transition:all .2s}
+.n-login:hover{color:var(--nav-text-hover);background:rgba(255,255,255,.08)}
+
+/* ═══════════════════════════════ BUTTONS (clay) ═══════════════════════════════ */
+.n-demo,.drawer-demo,.btn-feat-know{
+  padding:10px 22px;font-size:14px;font-weight:700;
+  background:linear-gradient(150deg,var(--p600),var(--p700));
+  color:#fff;border-radius:var(--rpill);
+  display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  box-shadow:var(--clay-purple);
+  transition:box-shadow .28s ease,transform .25s ease,background .3s ease;
+  letter-spacing:-.01em;position:relative;overflow:hidden;
+}
+.n-demo svg{width:13px;height:13px;transition:transform .25s}
+.n-demo:hover,.drawer-demo:hover,.btn-feat-know:hover{
+  background:linear-gradient(150deg,var(--p700),var(--p800));
+  box-shadow:var(--clay-purple-hover);
+  transform:translateY(-2px);
+}
+.n-demo:active,.drawer-demo:active,.btn-feat-know:active{box-shadow:var(--clay-purple-pressed);transform:translateY(0)}
+.n-demo:hover svg{transform:translateX(3px)}
+html[data-theme="dark"] .n-demo,html[data-theme="dark"] .drawer-demo,html[data-theme="dark"] .btn-feat-know{
+  background:linear-gradient(150deg,#7c5fd6,#a88cff);color:#fff;
+}
+
+/* glare sweep on hover for every clay/filled button */
+.n-demo,.drawer-demo,.btn-feat-know,.btn-white{position:relative;overflow:hidden}
+.n-demo::after,.drawer-demo::after,.btn-feat-know::after,.btn-white::after{
+  content:'';position:absolute;top:0;left:-130%;width:70%;height:100%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.4),transparent);
+  transform:skewX(-20deg);transition:left .55s ease;pointer-events:none;
+}
+.n-demo:hover::after,.drawer-demo:hover::after,.btn-feat-know:hover::after,.btn-white:hover::after{left:150%}
+
+.btn-white{
+  padding:14px 30px;background:#fff;color:var(--p800);border-radius:var(--rpill);
+  font-size:15px;font-weight:700;display:inline-flex;align-items:center;gap:9px;
+  box-shadow:var(--clay-light);transition:box-shadow .28s,transform .28s;letter-spacing:-.01em;
+}
+.btn-white:hover{background:var(--p100);transform:translateY(-2px);box-shadow:var(--clay-light-hover)}
+.btn-white svg{width:16px;height:16px}
+
+.btn-ghost{
+  padding:13px 26px;background:var(--glass-on-color);color:#fff;
+  border:1px solid var(--glass-border-on-color);border-radius:var(--rpill);
+  font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:9px;
+  -webkit-backdrop-filter:blur(10px) saturate(150%);backdrop-filter:blur(10px) saturate(150%);
+  box-shadow:var(--glass-highlight-on-color);transition:all .28s;
+}
+.btn-ghost:hover{background:var(--glass-on-color-hover);border-color:rgba(255,255,255,.5);transform:translateY(-2px)}
+.btn-ghost svg{width:14px;height:14px}
+
+/* social/auth buttons — clay */
+.soc-btn,.btn-google{
+  border-radius:var(--radius-clay-sm);background:#fff;color:var(--ink);
+  box-shadow:var(--clay-light);transition:box-shadow .25s,transform .2s;
+}
+.soc-btn:hover,.btn-google:hover{box-shadow:var(--clay-light-hover);transform:translateY(-1px)}
+html[data-theme="dark"] .soc-btn,html[data-theme="dark"] .btn-google{background:rgba(255,255,255,.06);color:var(--ink);box-shadow:var(--clay-light)}
+
+/* ═══════════════════════════════ THEME TOGGLE + HAMBURGER (clay-sm, always light — they live on the dark nav pill) ═══════════════════════════════ */
+.theme-toggle,.nav-toggle{
+  width:40px;height:40px;border-radius:var(--rpill);
+  background:#fdfcff;color:#1a1230;border:none;
+  display:inline-grid;place-items:center;position:relative;overflow:hidden;flex-shrink:0;
+  box-shadow:0 8px 18px rgba(5,3,14,.35),inset 0 1px 0 rgba(255,255,255,.85);
+  transition:box-shadow .28s ease,transform .25s ease,background .25s ease;
+}
+.theme-toggle:hover,.nav-toggle:hover{background:#fff;transform:translateY(-1px)}
+.theme-icon{width:18px;height:18px;position:absolute;transition:opacity .25s ease,transform .25s ease}
+.theme-sun{opacity:0;transform:translateY(8px) rotate(-35deg) scale(.75)}
+.theme-moon{opacity:1;transform:translateY(0) rotate(0) scale(1)}
+html[data-theme="dark"] .theme-sun{opacity:1;transform:translateY(0) rotate(0) scale(1)}
+html[data-theme="dark"] .theme-moon{opacity:0;transform:translateY(-8px) rotate(35deg) scale(.75)}
+
+.nav-toggle{display:none;flex-direction:column;gap:5px}
+.nav-toggle span{width:18px;height:2px;background:#1a1230;border-radius:999px}
+
+/* drawer close button follows the site theme (it lives inside the drawer, not the dark pill) */
+.drawer-close{
+  width:40px;height:40px;border-radius:var(--rpill);
+  background:var(--p50);color:var(--ink);border:none;
+  display:inline-grid;place-items:center;position:relative;overflow:hidden;flex-shrink:0;
+  box-shadow:var(--clay-sm);transition:box-shadow .28s ease,transform .25s ease,color .25s ease;
+}
+.drawer-close:hover{color:var(--p700);transform:translateY(-1px)}
+html[data-theme="dark"] .drawer-close{background:rgba(255,255,255,.07);color:var(--ink)}
+.drawer-close span{position:absolute;left:50%;top:50%;width:18px;height:2px;background:var(--p700);border-radius:999px}
+.drawer-close span:first-child{transform:translate(-50%,-50%) rotate(45deg)}
+.drawer-close span:last-child{transform:translate(-50%,-50%) rotate(-45deg)}
+
+/* ═══════════════════════════════ MOBILE DRAWER (glass) ═══════════════════════════════ */
+.nav-overlay{z-index:6000!important;position:fixed;inset:0;background:rgba(20,14,35,.5);-webkit-backdrop-filter:blur(10px) saturate(120%);backdrop-filter:blur(10px) saturate(120%);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s ease,visibility .3s ease}
+.mobile-drawer{
+  z-index:6001!important;
+  position:fixed;top:0;right:0;width:min(86vw,360px);height:100dvh;
+  background:var(--glass-bg-strong);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
+  border-left:1px solid var(--glass-border);
+  box-shadow:-28px 0 80px rgba(20,14,35,.24);
+  display:flex;flex-direction:column;
+  transform:translateX(105%);opacity:0;visibility:hidden;pointer-events:none;
+  transition:transform .42s var(--ease-smooth),opacity .25s ease,visibility .25s ease;
+}
+body.nav-lock .nav-overlay{opacity:1;visibility:visible;pointer-events:auto}
+body.nav-lock .mobile-drawer{transform:translateX(0);opacity:1;visibility:visible;pointer-events:auto}
+html[data-theme="dark"] .mobile-drawer{border-left-color:rgba(222,210,255,.16)}
+
+.drawer-head{height:72px;padding:0 18px 0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--glass-edge);flex-shrink:0}
+.drawer-logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:19px;font-weight:800;color:var(--ink)}
+.drawer-logo span{color:var(--p600)}
+
+.drawer-links{flex:1;padding:32px 18px 24px;display:flex;flex-direction:column;gap:10px}
+.drawer-links a{
+  padding:14px 18px;border-radius:var(--radius-clay-sm);
+  font-family:var(--font-body);font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink);background:var(--glass-bg-soft);border:1px solid rgba(93,63,184,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6);
+  transition:background .25s ease,color .25s ease,box-shadow .25s ease,transform .25s ease;
+}
+.drawer-links a:hover,.drawer-links a.active{background:rgba(124,95,214,.14);border-color:rgba(93,63,184,.3);color:var(--p700);transform:translateX(3px)}
+html[data-theme="dark"] .drawer-links a{background:rgba(255,255,255,.06);border-color:rgba(222,210,255,.18);color:var(--ink)}
+html[data-theme="dark"] .drawer-links a:hover,html[data-theme="dark"] .drawer-links a.active{background:rgba(199,179,255,.14);border-color:rgba(199,179,255,.32);color:var(--p700)}
+
+.drawer-bottom{padding:18px 18px 24px;border-top:1px solid var(--glass-edge)}
+.drawer-theme-toggle{
+  width:100%;min-height:48px;border-radius:var(--radius-clay-sm);
+  background:var(--glass-bg-soft);color:var(--ink);border:1px solid rgba(93,63,184,.14);
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--font-body);font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  margin-bottom:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.6);transition:background .25s ease,transform .25s ease;
+}
+.drawer-theme-toggle:hover{background:rgba(124,95,214,.14)}
+.drawer-theme-icon{width:22px;height:22px;display:inline-grid;place-items:center;position:relative}
+html[data-theme="dark"] .drawer-theme-toggle{background:rgba(255,255,255,.06);border-color:rgba(222,210,255,.18);color:var(--ink)}
+
+.drawer-demo{width:100%;min-height:48px;border-radius:var(--radius-clay-sm)}
+
+/* ═══════════════════════════════ FOOTER ═══════════════════════════════ */
+footer{background:var(--p900);padding:48px 0 0;margin-top:auto;position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.fw{max-width:var(--page-max);margin:0 auto;padding:0 var(--page-pad);position:relative;z-index:1;width:100%}
+.f-top{padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:36px}
+.f-brand-name{font-family:var(--font-display);font-size:22px;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:6px}
+.f-brand-name span{color:var(--p400)}
+html[data-theme="dark"] .f-brand-name span{color:var(--p700)}
+.f-tagline{font-size:13px;color:rgba(255,255,255,.35);max-width:400px;line-height:1.55}
+.fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-bottom:40px}
+.fcol{min-width:0}
+.fcol h4{font-family:var(--font-body);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--p400);margin-bottom:16px}
+.fcol ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.fcol li a{font-size:13.5px;color:rgba(255,255,255,.5);display:inline-flex;align-items:center;gap:8px;transition:color .2s;max-width:100%}
+.fcol li a:hover{color:#fff}
+.fcol li a svg{width:14px;height:14px;flex-shrink:0;color:var(--p500)}
+.fbot{padding:20px 0;border-top:1px solid rgba(255,255,255,.08);font-size:12.5px;color:rgba(255,255,255,.28);text-align:center}
+
+/* ══════════════════════════════════════════════════════════════════════
+   CLAYMORPHISM — cards/panels on plain white or light canvas
+   (feature grids, problem cards, testimonials, pricing/service pillars,
+   career & demo cards, legal TOC, contact card, form wraps, FAQ panel)
+   ══════════════════════════════════════════════════════════════════════ */
+.pcard,.fg-card,.tcard2,
+.sv-sec-card,.sv-pillar-card,.sv-prob-item,
+.fcard,.demo-card,.map-pin-card,
+.wnt-card,.cr-why-card,.cr-form-wrap,.cr-file-box,
+.toc,.intro-box,.contact-card,
+.page > .card{
+  border-radius:var(--radius-clay);
+  border-color:transparent;
+  box-shadow:var(--clay-light);
+  transition:box-shadow .4s var(--ease-clay),transform .4s var(--ease-clay),background .3s;
+}
+.pcard:hover,.fg-card:hover,.tcard2:hover,
+.sv-sec-card:hover,.sv-pillar-card:hover,.sv-prob-item:hover,
+.fcard:hover,.demo-card:hover,.map-pin-card:hover,
+.wnt-card:hover,.cr-why-card:hover{
+  box-shadow:var(--clay-light-hover);
+  transform:translateY(-6px);
+}
+html[data-theme="dark"] .pcard,html[data-theme="dark"] .fg-card,html[data-theme="dark"] .tcard2,
+html[data-theme="dark"] .sv-sec-card,html[data-theme="dark"] .sv-pillar-card,html[data-theme="dark"] .sv-prob-item,
+html[data-theme="dark"] .fcard,html[data-theme="dark"] .demo-card,html[data-theme="dark"] .map-pin-card,
+html[data-theme="dark"] .wnt-card,html[data-theme="dark"] .cr-why-card,html[data-theme="dark"] .cr-form-wrap,
+html[data-theme="dark"] .cr-file-box,html[data-theme="dark"] .toc,html[data-theme="dark"] .intro-box,
+html[data-theme="dark"] .contact-card,html[data-theme="dark"] .page > .card{
+  background:var(--p100);box-shadow:var(--clay-light);
+}
+
+/* db-chip / slots-box / dm-card: smaller clay chips inside forms & dashboards */
+.db-chip,.slots-box,.dm-card{
+  border-radius:var(--radius-clay-sm);border-color:transparent;
+  box-shadow:var(--clay-sm);transition:box-shadow .3s,transform .3s;
+}
+.db-chip:hover,.slots-box:hover,.dm-card:hover{box-shadow:var(--clay-light-hover);transform:translateY(-2px)}
+
+/* ══════════════════════════════════════════════════════════════════════
+   GLASSMORPHISM — surfaces floating on top of a purple/gradient section
+   (hero dashboard, notification chips, solution & trust cards, badges)
+   ══════════════════════════════════════════════════════════════════════ */
+.dash,.notif-chip,.enroll-chip,.t-badge{
+  background:var(--glass-bg-strong);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat));
+  backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat));
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-highlight),0 0 0 1px var(--glass-edge),var(--glass-shadow);
+}
+.dsc{
+  background:var(--glass-bg-soft);border:1px solid var(--glass-border);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+}
+.sc,.tcard,.mva-card{
+  background:var(--glass-on-color);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);
+  border:1px solid var(--glass-border-on-color);
+  box-shadow:var(--glass-highlight-on-color),var(--glass-shadow-on-color);
+  transition:background .3s,border-color .3s,transform .4s var(--ease-clay),box-shadow .4s;
+}
+.sc:hover,.tcard:hover,.mva-card:hover{background:var(--glass-on-color-hover);border-color:rgba(255,255,255,.38)}
+html[data-theme="dark"] .dash{background:rgba(26,19,44,.74)}
+html[data-theme="dark"] .dsc{background:rgba(255,255,255,.06);border-color:rgba(222,210,255,.14)}
+
+/* ══════════════════════════════════════════════════════════════════════
+   FORM FIELDS — glass surface, clay-style focus ring
+   ══════════════════════════════════════════════════════════════════════ */
+.dm-field input,.dm-field select,.dm-field textarea,
+.ff input,.ff select,.ff textarea,
+.cr-fi,.field input{
+  background:rgba(255,255,255,.6);border:1px solid rgba(93,63,184,.2);
+  border-radius:var(--radius-clay-sm);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+  transition:box-shadow .25s,border-color .25s,background .25s;
+}
+.dm-field input:focus,.dm-field select:focus,.dm-field textarea:focus,
+.ff input:focus,.ff select:focus,.ff textarea:focus,
+.cr-fi:focus,.field input:focus{
+  background:var(--glass-bg-strong);border-color:var(--p500);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 0 0 4px rgba(124,95,214,.16);
+  outline:none;
+}
+html[data-theme="dark"] .dm-field input,html[data-theme="dark"] .dm-field select,html[data-theme="dark"] .dm-field textarea,
+html[data-theme="dark"] .ff input,html[data-theme="dark"] .ff select,html[data-theme="dark"] .ff textarea,
+html[data-theme="dark"] .cr-fi,html[data-theme="dark"] .field input{
+  background:rgba(255,255,255,.06);border-color:var(--glass-border);color:var(--ink);
+}
+
+/* FAQ panel (contact/services pages) — one cohesive glass surface */
+#faqList{
+  background:var(--glass-bg);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat));backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat));
+  border:1px solid var(--glass-border);box-shadow:var(--glass-highlight),0 0 0 1px var(--glass-edge),var(--glass-shadow);
+  border-radius:var(--radius-clay);padding:8px 28px;
+}
+
+/* ── Auth page dark mode (auth.css owns light-mode look only) ──────────── */
+html[data-theme="dark"] .page{--ink:#fbf8ff;--ink2:#ded6f3;--ink3:#a99dc2;--line:rgba(222,210,255,.16);--bg:#0f0a1c;background:#0f0a1c}
+html[data-theme="dark"] body:has(> .page){background:#0f0a1c}
+html[data-theme="dark"] .page .magic-ring{background:rgba(199,179,255,.12);border-color:rgba(199,179,255,.3)}
+
+/* ══════════════════════════════════════════════════════════════════════
+   RESPONSIVE — shared chrome only (page layouts handle their own)
+   ══════════════════════════════════════════════════════════════════════ */
+@media (max-width:900px){
+  .nw > .nlinks,.nw > .nright{display:none}
+  .nav-toggle{display:flex;margin-left:auto}
+  body.nav-lock{overflow:hidden}
+  nav{padding:14px var(--nav-gutter) 0}
+  .nw{height:64px;padding:0 20px}
+}
+@media (max-width:900px){
+  .nw{-webkit-backdrop-filter:blur(12px) saturate(150%);backdrop-filter:blur(12px) saturate(150%)}
+}
+
+@media (hover:none) and (pointer:coarse){
+  .pcard:hover,.fg-card:hover,.tcard:hover,.tcard2:hover,.sc:hover,.dsc:hover{transform:none}
+  .n-demo,.nav-toggle,.drawer-close,.drawer-demo,.drawer-links a,.drawer-theme-toggle,.btn-white,.btn-ghost,.btn-feat-know{min-height:44px}
+}
+@media (prefers-reduced-motion:reduce){
+  .n-demo,.drawer-demo,.btn-feat-know,.btn-white,.pcard,.fg-card,.tcard2,.sc,.tcard{transition:none}
+}
+@media print{
+  nav,.mobile-drawer,.nav-overlay,.nav-toggle{display:none!important}
+  footer{background:#fff!important;color:#000!important;box-shadow:none}
+  .fcol a,.fbot{color:#000!important}
+}
+@media (forced-colors:active){
+  .pcard,.fg-card,.tcard2,.sc,.tcard,.dash{border:1px solid CanvasText!important}
+  .btn-white,.btn-ghost,.n-demo,.drawer-demo,.btn-feat-know{border:1px solid ButtonText!important}
+}
